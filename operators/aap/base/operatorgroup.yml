@@ -7,4 +7,5 @@ metadata:
   name: ansible-automation-platform-operator
   namespace: aap-infra
 spec:
-  targetNamespaces: []
+  targetNamespaces:
+    - aap-infra
