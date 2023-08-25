@@ -1,0 +1,34 @@
+---
+apiVersion: org.eclipse.che/v2
+kind: CheCluster
+metadata:
+  name: devspaces
+  namespace: openshift-devspaces
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  components:
+    cheServer:
+      debug: false
+      logLevel: INFO
+    database:
+      credentialsSecretName: postgres-credentials
+      externalDb: false
+      postgresDb: dbche
+      postgresHostName: postgres
+      postgresPort: '5432'
+      pvc:
+        claimSize: 1Gi
+    metrics:
+      enable: true
+  containerRegistry: {}
+  devEnvironments:
+    secondsOfRunBeforeIdling: -1
+    maxNumberOfWorkspacesPerUser: -1
+    defaultNamespace:
+      template: <username>-devspaces
+    secondsOfInactivityBeforeIdling: 3600
+    storage:
+      pvcStrategy: per-workspace
+  networking: {}

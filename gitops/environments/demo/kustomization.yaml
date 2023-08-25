@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: kustomization-file
+resources:
+  - applications/devspaces-operator.yml
+  - applications/rhsso-operator.yml
+  - applications/aap-operator.yml
