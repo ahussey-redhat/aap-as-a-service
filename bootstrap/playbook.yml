@@ -1,0 +1,32 @@
+---
+- name: Install and configure ArgoCD
+  hosts: localhost
+  connection: local
+  become: false
+  gather_facts: false
+  tasks:
+    # Deploy ArgoCD
+    - name: configure argocd namespace
+      kubernetes.core.k8s:
+        src: "argocd/namespace.yml"
+      failed_when: false
+
+    - name: configure argocd subscription
+      kubernetes.core.k8s:
+        src: "argocd/subscription.yml"
+      register: deploy_argocd
+      until: "deploy_argocd.result.status.state == 'AtLatestKnown'"
+      retries: 10
+      delay: 10
+
+    - name: configure argocd cluster role binding
+      kubernetes.core.k8s:
+        src: "argocd/clusterrolebinding.yml"
+
+    - name: configure argocd repo
+      kubernetes.core.k8s:
+        template: "argocd/repo.yml"
+
+    - name: configure argocd initial application
+      kubernetes.core.k8s:
+        template: "argocd/application.yml"

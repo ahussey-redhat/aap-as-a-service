@@ -1,0 +1,17 @@
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: gitops-repo
+  namespace: openshift-gitops
+  labels:
+    argocd.argoproj.io/secret-type: repository
+  annotations:
+    managed-by: argocd.argoproj.io
+data:
+  insecure: ZmFsc2U=
+  name: Z2l0b3Bz
+  project: ZGVmYXVsdA==
+  type: Z2l0
+  url: aHR0cHM6Ly9naXRodWIuY29tL2FodXNzZXktcmVkaGF0L2FhcC1hcy1hLXNlcnZpY2UuZ2l0
+type: Opaque
