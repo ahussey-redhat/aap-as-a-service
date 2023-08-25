@@ -6,4 +6,5 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
   name: ansible-automation-platform-operator
   namespace: aap-infra
-spec: {}
+spec:
+  targetNamespaces: []

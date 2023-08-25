@@ -6,4 +6,6 @@ metadata:
     argocd.argoproj.io/sync-wave: "0"
     openshift.io/description: "Ansible Automation Platform - Infrastructure Instance"
     openshift.io/display-name: "Ansible Automation Platform"
+  labels:
+    openshift.io/cluster-monitoring: "true"
   name: aap-infra
