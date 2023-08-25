@@ -7,10 +7,10 @@ patches:
   - patch: |-
       - op: replace
         path: /spec/channel
-        value: 'alpha'
+        value: 'stable'
       - op: replace
         path: /spec/installPlanApproval
-        value: 'Manual'
+        value: 'Automatic'
     target:
       kind: Subscription
       name: rhsso-operator
