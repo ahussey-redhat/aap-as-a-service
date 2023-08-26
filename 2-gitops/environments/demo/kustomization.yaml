@@ -3,6 +3,7 @@ kind: Kustomization
 metadata:
   name: kustomization-file
 resources:
-  - applications/devspaces-operator.yml
-  - applications/rhsso-operator.yml
   - applications/aap-operator.yml
+  - applications/devspaces-operator.yml
+  - applications/pipelines-operator.yml
+  - applications/rhsso-operator.yml

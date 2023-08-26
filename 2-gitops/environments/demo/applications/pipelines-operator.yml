@@ -2,17 +2,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: rhsso
+  name: pipeline-operator
   namespace: openshift-gitops
   annotations:
-    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   destination:
     namespace: openshift-operators
     server: 'https://kubernetes.default.svc'
   project: default
   source:
-    path: 2-operators/rhsso/overlays/stable
+    path: 2-operators/pipelines/overlays/latest
     repoURL: >-
       https://github.com/ahussey-redhat/aap-as-a-service.git
     targetRevision: main
