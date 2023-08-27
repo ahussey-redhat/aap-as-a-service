@@ -11,6 +11,10 @@
         src: "argocd/namespace.yml"
       failed_when: false
 
+    - name: configure argocd operatorgroup
+      kubernetes.core.k8s:
+        src: "argocd/operatorgroup.yml"
+
     - name: configure argocd subscription
       kubernetes.core.k8s:
         src: "argocd/subscription.yml"
