@@ -4,8 +4,9 @@ kind: OperatorGroup
 metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
-  name: ansible-automation-platform
+  name: global-operators
   namespace: openshift-operators
 spec:
-  targetNamespace:
+  targetNamespaces:
     - openshift-operators
+  upgradeStrategy: Default
