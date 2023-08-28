@@ -1,0 +1,92 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  annotations:
+    tekton.dev/displayName: deploy aap instance
+    tekton.dev/pipelines.minVersion: 0.17.0
+    tekton.dev/tags: cli
+  name: deploy-aap-instance
+  labels:
+    app.kubernetes.io/version: '0.1'
+    operator.tekton.dev/operand-name: openshift-pipelines-addons
+    operator.tekton.dev/provider-type: ahussey
+spec:
+  description: >-
+    This task runs all the commands required to deploy an AAP instance.
+  params:
+    - default: 20
+      description: The max number of managed nodes
+      name: maxHosts
+      type: integer
+    - description: Team or Branch name
+      name: teamOrBranchName
+      type: string
+    - description: AAP instance owner
+      name: owner
+      type: string
+    - description: ServiceNow transaction ID
+      name: serviceNowTransactionID
+      type: string
+  steps:
+    - env:
+        - name: HOME
+          value: /tekton/home
+      image: >-
+        image-registry.openshift-image-registry.svc:5000/openshift/cli:$(params.VERSION)
+      name: kustomize-aap-instance
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+
+        [[ "$(workspaces.manifest-dir.bound)" == "true" ]] && \
+        cd $(workspaces.manifest-dir.path)
+
+        [[ "$(workspaces.kubeconfig-dir.bound)" == "true" ]] && \
+        [[ -f $(workspaces.kubeconfig-dir.path)/kubeconfig ]] && \
+        export KUBECONFIG=$(workspaces.kubeconfig-dir.path)/kubeconfig
+        
+        # Configure AAP instance name
+        kustomize metadata.name=${branchOrTeamName}${instanceNumber} environments/${branchOrTeamName}/${instanceNumber}/application.yml
+
+        # Configure AAP instance namespace
+        kustomize metadata.namespace=${branchOrTeamName} environments/${branchOrTeamName}/${instanceNumber}/application.yml
+
+        # Configure AAP labels
+        kustomize metadata.labels.servicenowid=${serviceNowID} environments/${branchOrTeamName}/${instanceNumber}/application.yml
+        kustomize metadata.labels.owner=${owner} environments/${branchOrTeamName}/${instanceNumber}/application.yml
+
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+    - env:
+        - name: HOME
+          value: /tekton/home
+      image: >-
+        image-registry.openshift-image-registry.svc:5000/openshift/cli:$(params.VERSION)
+      name: deploy-aap-instance
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+
+        [[ "$(workspaces.manifest-dir.bound)" == "true" ]] && \
+        cd $(workspaces.manifest-dir.path)
+
+        [[ "$(workspaces.kubeconfig-dir.bound)" == "true" ]] && \
+        [[ -f $(workspaces.kubeconfig-dir.path)/kubeconfig ]] && \
+        export KUBECONFIG=$(workspaces.kubeconfig-dir.path)/kubeconfig
+
+        oc apply -f environments/${branchOrTeamName}/${instanceNumber}/application.yml
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+  workspaces:
+    - description: >-
+        The workspace which contains kubernetes manifests which we want to apply
+        on the cluster.
+      name: manifest-dir
+      optional: true
+    - description: >-
+        The workspace which contains the the kubeconfig file if in case we want
+        to run the oc command on another cluster.
+      name: kubeconfig-dir
+      optional: true
