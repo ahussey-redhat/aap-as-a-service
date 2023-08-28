@@ -1,0 +1,16 @@
+# TODO
+- [ ] Configure Day0 ops
+  - [ ] Deploy AAP instance using TekTon + ArgoCD
+    - [ ] Use [aap-as-a-service-gitops](https://github.com/ahussey-redhat/aap-as-a-service-gitops/tree/main) repo
+  - [ ] Include metadata
+    - [ ] Instance requestor
+    - [ ] Instance approver
+    - [ ] ServiceNow transaction ID
+  - [ ] Configure break-glass/superuser account
+- [ ] Configure Day1 ops
+  - [ ] Create organisation
+    - [ ] maxHosts
+    - [ ] external auth
+      - [ ] priviledged users
+      - [ ] allowed users
+- [ ] Configure Day2 ops
