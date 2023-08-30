@@ -1,0 +1,27 @@
+apiVersion: tekton.dev/v1
+kind: TaskRun
+metadata:
+  generateName: step-update-servicenow-ticket-
+spec:
+  taskSpec:
+    params:
+    - name: salesforceID
+    - name: branchOrTeamName
+      default: param-value
+    - name: instanceID
+      default: 1
+    steps:
+    - name: bash
+      image: ubuntu
+      env:
+      - name: FOO
+        value: foooooooo
+      script: |
+        #!/usr/bin/env bash
+        set -euxo pipefail
+        echo "Updating ServiceNow ticket"
+        echo FOO is ${FOO}
+        echo substring is ${FOO:2:4}
+        for i in {1..10}; do
+          echo line $i
+        done

@@ -1,0 +1,31 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  generateName: deploy-aap-instance-
+spec:
+  workspaces:
+    - name: working-directory
+  params:
+    - name: argocd-git-url
+      type: string
+      description: ArgoCD git repository URL
+      default: git@github.com:ahussey-redhat/aap-as-a-service-gitops.git
+  tasks:
+    - name: clone-argocd-repository
+      taskRef:
+        kind: ClusterTask
+        name: git-clone
+      params:
+        - name: url
+          value: "$(params.argocd-git-url)"
+      workspaces:
+        - name: output
+          workspace: working-directory
+    - name: deploy-aap-instance
+      taskRef:
+        name: deploy-aap-instance
+      runAfter:
+        - clone-argocd-repository
+      workspaces:
+        - name: output
+          workspace: working-directory
