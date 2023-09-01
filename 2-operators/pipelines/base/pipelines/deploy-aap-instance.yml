@@ -11,6 +11,9 @@ spec:
       description: ArgoCD git repository URL
       default: git@github.com:ahussey-redhat/aap-as-a-service-gitops.git
   tasks:
+    - name: update-servicenow-ticket-init
+      taskRef:
+        name: update-servicenow-ticket
     - name: clone-argocd-repository
       taskRef:
         kind: ClusterTask
@@ -21,6 +24,13 @@ spec:
       workspaces:
         - name: output
           workspace: working-directory
+      runAfter:
+        - update-servicenow-ticket-init
+    - name: update-servicenow-ticket-clone
+      taskRef:
+        name: update-servicenow-ticket
+      runAfter:
+        - clone-argocd-repository
     - name: deploy-aap-instance
       taskRef:
         name: deploy-aap-instance
@@ -29,3 +39,7 @@ spec:
       workspaces:
         - name: output
           workspace: working-directory
+  finally:
+    - name: update-servicenow-ticket-complete
+      taskRef:
+        name: update-servicenow-ticket
