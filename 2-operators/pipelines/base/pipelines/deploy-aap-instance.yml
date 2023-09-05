@@ -14,6 +14,11 @@ spec:
     - name: update-servicenow-ticket-init
       taskRef:
         name: update-servicenow-ticket
+      params:
+        - name: state
+          value: initiating
+        - name: ticketID
+          value: $(params.ticketID)
     - name: clone-argocd-repository
       taskRef:
         kind: ClusterTask
@@ -26,9 +31,14 @@ spec:
           workspace: working-directory
       runAfter:
         - update-servicenow-ticket-init
-    - name: update-servicenow-ticket-clone
+    - name: update-servicenow-ticket-deploy
       taskRef:
         name: update-servicenow-ticket
+      params:
+        - name: state
+          value: deploying
+        - name: ticketID
+          value: $(params.ticketID)
       runAfter:
         - clone-argocd-repository
     - name: deploy-aap-instance
@@ -39,7 +49,22 @@ spec:
       workspaces:
         - name: output
           workspace: working-directory
-  finally:
     - name: update-servicenow-ticket-complete
       taskRef:
         name: update-servicenow-ticket
+      params:
+        - name: state
+          value: complete
+        - name: ticketID
+          value: $(params.ticketID)
+      runAfter:
+        - deploy-aap-instance
+  finally:
+    - name: update-servicenow-ticket-failed
+      taskRef:
+        name: update-servicenow-ticket
+      params:
+        - name: state
+          value: failed
+        - name: ticketID
+          value: $(params.ticketID)

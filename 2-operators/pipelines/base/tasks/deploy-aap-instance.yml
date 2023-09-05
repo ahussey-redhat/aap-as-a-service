@@ -44,7 +44,13 @@ spec:
         [[ "$(workspaces.kubeconfig-dir.bound)" == "true" ]] && \
         [[ -f $(workspaces.kubeconfig-dir.path)/kubeconfig ]] && \
         export KUBECONFIG=$(workspaces.kubeconfig-dir.path)/kubeconfig
+
+        if [[ -d environments/${branchOrTeamName}-${instanceNumber} ]]; then
+          cp -r environments/template environments/${branchOrTeamName}-${instanceNumber}
+        fi
         
+        cd environments/${branchOrTeamName}-${instanceNumber}
+
         # Configure AAP instance name
         kustomize metadata.name=${branchOrTeamName}${instanceNumber} environments/${branchOrTeamName}/${instanceNumber}/application.yml
 
@@ -54,6 +60,25 @@ spec:
         # Configure AAP labels
         kustomize metadata.labels.servicenowid=${serviceNowID} environments/${branchOrTeamName}/${instanceNumber}/application.yml
         kustomize metadata.labels.owner=${owner} environments/${branchOrTeamName}/${instanceNumber}/application.yml
+
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+    - env:
+        - name: HOME
+          value: /tekton/home
+      image: >-
+        image-registry.openshift-image-registry.svc:5000/openshift/cli:$(params.VERSION)
+      name: git-push
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+      
+        git config user.name $(params.author)
+        git config user.email $(params.author)@example.com
+        git add --all
+        git commit -m "Add ${branchOrTeamName}-${instanceNumber} environment"
+        git push -u origin main -f
 
       securityContext:
         runAsNonRoot: true
@@ -75,7 +100,7 @@ spec:
         [[ -f $(workspaces.kubeconfig-dir.path)/kubeconfig ]] && \
         export KUBECONFIG=$(workspaces.kubeconfig-dir.path)/kubeconfig
 
-        oc apply -f environments/${branchOrTeamName}/${instanceNumber}/application.yml
+        oc apply -f environments/${branchOrTeamName}-${instanceNumber}/application.yml
       securityContext:
         runAsNonRoot: true
         runAsUser: 65532
