@@ -13,6 +13,9 @@ spec:
       type: string
       description: ArgoCD git repository URL
       default: git@github.com:ahussey-redhat/aap-as-a-service-gitops.git
+    - name: ticketID
+      type: string
+      description: The ServiceNow ticket ID used for provisioning the AAP instance
   tasks:
     - name: update-servicenow-ticket-init
       taskRef:
@@ -21,7 +24,7 @@ spec:
         - name: state
           value: initiating
         - name: ticketID
-          value: $(params.ticketID)
+          value: "$(params.ticketID)"
     - name: clone-argocd-repository
       taskRef:
         kind: ClusterTask
@@ -41,7 +44,7 @@ spec:
         - name: state
           value: deploying
         - name: ticketID
-          value: $(params.ticketID)
+          value: "$(params.ticketID)"
       runAfter:
         - clone-argocd-repository
     - name: deploy-aap-instance
@@ -59,7 +62,7 @@ spec:
         - name: state
           value: complete
         - name: ticketID
-          value: $(params.ticketID)
+          value: "$(params.ticketID)"
       runAfter:
         - deploy-aap-instance
   finally:
@@ -70,4 +73,4 @@ spec:
         - name: state
           value: failed
         - name: ticketID
-          value: $(params.ticketID)
+          value: "$(params.ticketID)"
