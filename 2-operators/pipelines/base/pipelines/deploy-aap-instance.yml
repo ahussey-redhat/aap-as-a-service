@@ -65,6 +65,7 @@ spec:
           value: "$(params.ticketID)"
       runAfter:
         - deploy-aap-instance
+        - update-servicenow-ticket-deploy
   finally:
     - name: update-servicenow-ticket-failed
       taskRef:
