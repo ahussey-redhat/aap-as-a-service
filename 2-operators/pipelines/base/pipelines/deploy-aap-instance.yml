@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
-  generateName: deploy-aap-instance-
+  name: deploy-aap-instance
 spec:
   workspaces:
     - name: working-directory
