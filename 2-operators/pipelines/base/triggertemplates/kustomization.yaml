@@ -3,4 +3,5 @@ kind: Kustomization
 metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "3"
-resources: []
+resources:
+  - deploy-aap-instance.yml

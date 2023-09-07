@@ -1,1 +1,28 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: deploy-aap-instance
+spec:
   serviceAccountName: pipelines
+  params:
+  - name: ticketID
+    description: The ServiceNow ticket ID
+  - name: message
+    description: The message to print
+    default: This is the default message
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: PipelineRun
+    metadata:
+      generateName: deploy-aap-instance-
+    spec:
+      pipelineRef:
+        name: simple-pipeline
+      params:
+      - name: message
+        value: $(tt.params.message)
+      - name: ticketID
+        value: $(tt.params.ticketID)
+      workspaces:
+      - name: output
+        emptyDir: {}
