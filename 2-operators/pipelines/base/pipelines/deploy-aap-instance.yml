@@ -13,9 +13,22 @@ spec:
       type: string
       description: ArgoCD git repository URL
       default: git@github.com:ahussey-redhat/aap-as-a-service-gitops.git
-    - name: ticketID
+    - name: serviceNowIncidentID
       type: string
       description: The ServiceNow ticket ID used for provisioning the AAP instance
+    - name: branchName
+      type: string
+      description: Name of user's Branch EG 'Enterprise IT'
+    - name: teamName
+      type: string
+      description: Name of user's Team EG 'Kubernetes'
+    - name: maxHosts
+      type: integer
+      description: The maximum number of hosts this AAP instance can manage
+      default: 20
+    - name: owner
+      type: string
+      description: Owner of the SericeNow request/AAP instance
   tasks:
     - name: update-servicenow-ticket-init
       taskRef:
@@ -23,8 +36,8 @@ spec:
       params:
         - name: state
           value: initiating
-        - name: ticketID
-          value: "$(params.ticketID)"
+        - name: serviceNowIncidentID
+          value: "$(params.serviceNowIncidentID)"
     - name: clone-argocd-repository
       taskRef:
         kind: ClusterTask
@@ -43,8 +56,8 @@ spec:
       params:
         - name: state
           value: deploying
-        - name: ticketID
-          value: "$(params.ticketID)"
+        - name: serviceNowIncidentID
+          value: "$(params.serviceNowIncidentID)"
       runAfter:
         - clone-argocd-repository
     - name: deploy-aap-instance
@@ -61,8 +74,8 @@ spec:
       params:
         - name: state
           value: complete
-        - name: ticketID
-          value: "$(params.ticketID)"
+        - name: serviceNowIncidentID
+          value: "$(params.serviceNowIncidentID)"
       runAfter:
         - deploy-aap-instance
         - update-servicenow-ticket-deploy
@@ -73,5 +86,5 @@ spec:
       params:
         - name: state
           value: failed
-        - name: ticketID
-          value: "$(params.ticketID)"
+        - name: serviceNowIncidentID
+          value: "$(params.serviceNowIncidentID)"

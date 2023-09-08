@@ -5,11 +5,17 @@ metadata:
 spec:
   serviceAccountName: pipelines
   params:
-  - name: ticketID
-    description: The ServiceNow ticket ID
-  - name: message
-    description: The message to print
-    default: This is the default message
+  - name: serviceNowIncidentID
+    description: The ServiceNow incident ID
+  - name: owner
+    description: The owner of this AAP instance
+  - name: branchName
+    description: The name of the user's Branch
+  - name: teamName
+    description: The name of the user's Team
+  - name: maxHosts
+    description: The maximum amount of hosts this AAP instance can manage
+    default: 20
   resourcetemplates:
   - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
@@ -17,12 +23,24 @@ spec:
       generateName: deploy-aap-instance-
     spec:
       pipelineRef:
-        name: simple-pipeline
+        name: deploy-aap-instance
       params:
-      - name: message
-        value: $(tt.params.message)
-      - name: ticketID
-        value: $(tt.params.ticketID)
+      - name: serviceNowIncidentID
+        value: $(tt.params.serviceNowIncidentID)
+      - name: owner
+        value: $(tt.params.author)
+      - name: branchName
+        value: $(tt.params.branchName)
+      - name: teamName
+        value: $(tt.params.teamName)
+      - name: maxHosts
+        value: $(tt.params.maxHosts)
       workspaces:
-      - name: output
-        emptyDir: {}
+      - name: working-directory
+        volumeClaimTemplate:
+          spec:
+            accessModes:
+              - ReadWriteMany
+            resources:
+              requests:
+                storage: 1Gi

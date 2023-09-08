@@ -1,0 +1,29 @@
+apiVersion: triggers.tektoin.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: aap-deploy-instance
+spec:
+  serviceAccountName: pipeline
+  triggers:
+    - name: servicenow-webhook
+      interceptors:
+        - ref:
+            name: cel
+          params:
+            - name: "overlays"
+              value:
+                - key: "owner"
+                  value: "body.author"
+      bindings:
+        - name: owner
+          value: $(extensions.owner)
+        - name: serviceNowIncidentID
+          value: $(extensions.serviceNowIncidentID)
+        - name: brancName
+          value: $(extensions.branchName)
+        - name: teamName
+          value: $(extensions.teamName)
+        - name: maxHosts
+          value: $(extensions.maxHosts)
+      template:
+        ref: deploy-aap-instance
