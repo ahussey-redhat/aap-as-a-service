@@ -94,7 +94,7 @@
           kind: ServiceAccount
           apiVersion: v1
           metadata:
-            name: pipelines
+            name: pipeline
             namespace: openshift-pipelines
           secrets:
             - name: argocd-github-ssh

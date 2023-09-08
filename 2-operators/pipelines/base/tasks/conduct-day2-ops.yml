@@ -1,7 +1,9 @@
 # WIP
-# This should:
-# 1. Deploy an AAP instance, specific to the ServiceNow incident that was raised
-# 2. Be managed utilizing GitOps
+# This task should:
+# 1. create CRD instances to create an organization within the AAP instance
+# 2. configure SSO for external auth
+# 3. sync content for PAH
+# 4. configure logging and metrics
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
@@ -9,7 +11,7 @@ metadata:
     tekton.dev/displayName: deploy aap instance
     tekton.dev/pipelines.minVersion: 0.17.0
     tekton.dev/tags: aap
-  name: deploy-aap-instance
+  name: conduct-day2-ops
   labels:
     app.kubernetes.io/version: '0.1'
     operator.tekton.dev/operand-name: openshift-pipelines-addons
@@ -35,7 +37,7 @@ spec:
       name: serviceNowIncidentID
       type: string
   steps:
-    # Create environment, and update appropriate variables for the AAP instance
+    # Update appropriate variables for the AAP instance
     - name: kustomize-aap-instance
       image: >-
         registry.redhat.io/devspaces/udi-rhel8:latest
@@ -73,29 +75,6 @@ spec:
         git add --all
         git commit -m "Add ${branchOrTeamName}-${instanceNumber} environment"
         git push -u origin main -f
-
-    # Create AAP application in ArgoCD
-    - name: deploy-aap-instance
-      env:
-        - name: HOME
-          value: /tekton/home
-      image: >-
-        image-registry.openshift-image-registry.svc:5000/openshift/cli:$(params.VERSION)
-      resources: {}
-      script: |
-        #!/usr/bin/env bash
-
-        [[ "$(workspaces.manifest-dir.bound)" == "true" ]] && \
-        cd $(workspaces.manifest-dir.path)
-
-        [[ "$(workspaces.kubeconfig-dir.bound)" == "true" ]] && \
-        [[ -f $(workspaces.kubeconfig-dir.path)/kubeconfig ]] && \
-        export KUBECONFIG=$(workspaces.kubeconfig-dir.path)/kubeconfig
-
-        oc apply -f environments/${branchOrTeamName}-${instanceNumber}/application.yml
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 65532
 
   # Workspace definitions
   workspaces:

@@ -68,6 +68,25 @@ spec:
       workspaces:
         - name: output
           workspace: working-directory
+    - name: update-servicenow-ticket-deployed
+      taskRef:
+        name: update-servicenow-ticket
+      params:
+        - name: state
+          value: deployed
+        - name: serviceNowIncidentID
+          value: "$(params.serviceNowIncidentID)"
+      runAfter:
+        - deploy-aap-instance
+        - update-servicenow-ticket-deploy
+    - name: conduct-day2-ops
+      taskRef:
+        name: day2-ops
+      params:
+        - name: serviceNowIncidentID
+          value: "$(params.serviceNowIncidentID)"
+      runAfter:
+        - update-servicenow-ticket-deployed
     - name: update-servicenow-ticket-complete
       taskRef:
         name: update-servicenow-ticket
@@ -77,8 +96,7 @@ spec:
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
       runAfter:
-        - deploy-aap-instance
-        - update-servicenow-ticket-deploy
+        - conduct-day2-ops
   finally:
     - name: update-servicenow-ticket-failed
       taskRef:
