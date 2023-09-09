@@ -18,10 +18,10 @@ spec:
   description: >-
     This task runs all the commands required to deploy an AAP instance.
   params:
-    - default: "20"
-      description: The max number of managed nodes
-      name: maxHosts
-      type: string
+#    - default: "20"
+#      description: The max number of managed nodes
+#      name: maxHosts
+#      type: string
     - description: Branch name
       name: branchName
       type: string
@@ -68,8 +68,8 @@ spec:
       script: |
         #!/usr/bin/env bash
       
-        git config --global user.name $(params.author)
-        git config --global user.email $(params.author)@example.com
+        git config --global user.name $(params.owner)
+        git config --global user.email $(params.owner)@example.com
         git add --all
         git commit -m "Add ${branchName}-${teamName}-${instanceNumber} environment"
         git push -u origin main -f
