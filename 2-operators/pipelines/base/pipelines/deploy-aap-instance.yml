@@ -23,7 +23,7 @@ spec:
       type: string
       description: Name of user's Team EG 'Kubernetes'
     - name: maxHosts
-      type: integer
+      type: string
       description: The maximum number of hosts this AAP instance can manage
       default: 20
     - name: owner
