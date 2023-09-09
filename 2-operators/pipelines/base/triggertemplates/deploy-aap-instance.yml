@@ -15,7 +15,7 @@ spec:
     description: The name of the user's Team
   - name: maxHosts
     description: The maximum amount of hosts this AAP instance can manage
-    default: 20
+    default: "20"
   resourcetemplates:
   - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun

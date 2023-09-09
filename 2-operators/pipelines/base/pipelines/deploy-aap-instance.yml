@@ -25,7 +25,7 @@ spec:
     - name: maxHosts
       type: string
       description: The maximum number of hosts this AAP instance can manage
-      default: 20
+      default: "20"
     - name: owner
       type: string
       description: Owner of the SericeNow request/AAP instance

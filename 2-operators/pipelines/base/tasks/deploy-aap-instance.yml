@@ -18,7 +18,7 @@ spec:
   description: >-
     This task runs all the commands required to deploy an AAP instance.
   params:
-    - default: 20
+    - default: "20"
       description: The max number of managed nodes
       name: maxHosts
       type: string
@@ -80,7 +80,7 @@ spec:
         - name: HOME
           value: /tekton/home
       image: >-
-        image-registry.openshift-image-registry.svc:5000/openshift/cli:$(params.VERSION)
+        image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
       resources: {}
       script: |
         #!/usr/bin/env bash
@@ -92,7 +92,7 @@ spec:
         [[ -f $(workspaces.kubeconfig-dir.path)/kubeconfig ]] && \
         export KUBECONFIG=$(workspaces.kubeconfig-dir.path)/kubeconfig
 
-        oc apply -f environments/${branchOrTeamName}-${instanceNumber}/application.yml
+        oc apply -f environments/${branchName}-${teamName}-${instanceNumber}/application.yml
       securityContext:
         runAsNonRoot: true
         runAsUser: 65532
