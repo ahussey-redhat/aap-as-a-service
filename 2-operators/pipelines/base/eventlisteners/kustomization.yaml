@@ -3,6 +3,6 @@ kind: Kustomization
 metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "3"
-namespace: openshift-pipelines
+namespace: openshift-operators
 resources:
   - deploy-aap-instance.yml
