@@ -4,5 +4,6 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "3"
 namespace: openshift-pipelines
-resources:
-  - deploy-aap-instance.yml
+resources: []
+#resources:
+#  - deploy-aap-instance.yml
