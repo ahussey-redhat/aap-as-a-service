@@ -3,7 +3,6 @@ kind: EventListener
 metadata:
   name: aap-deploy-instance
 spec:
-  serviceAccountName: pipeline
   triggers:
     - name: servicenow-webhook
       interceptors:
