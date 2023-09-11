@@ -3,6 +3,7 @@ kind: Kustomization
 resources:
   - operatorgroup.yml
   - subscription.yml
+  - namespace.yml
   - ./eventlisteners
   - ./triggertemplates
   - ./pipelines
