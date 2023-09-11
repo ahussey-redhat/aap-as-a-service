@@ -1,0 +1,21 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: deploy-aap
+  namespace: aap-as-a-service
+  labels:
+    app.kubernetes.io/instance: pipeline-operator
+    app.kubernetes.io/managed-by: EventListener
+    app.kubernetes.io/part-of: Triggers
+    eventlistener: aap-deploy-instance
+spec:
+  subdomain: deploy-aap
+  to:
+    kind: Service
+    name: el-aap-deploy-instance
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Allow
+    destinationCACertificate: ''
+  port:
+    targetPort: http-listener
