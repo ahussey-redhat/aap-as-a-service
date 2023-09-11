@@ -16,6 +16,5 @@ spec:
   tls:
     termination: edge
     insecureEdgeTerminationPolicy: Allow
-    destinationCACertificate: ''
   port:
     targetPort: http-listener
