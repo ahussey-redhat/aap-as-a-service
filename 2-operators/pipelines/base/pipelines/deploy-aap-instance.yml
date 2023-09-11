@@ -37,7 +37,7 @@ spec:
       taskRef:
         name: update-servicenow-ticket
       params:
-        - name: state
+        - name: status
           value: initiating
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
@@ -65,7 +65,7 @@ spec:
       taskRef:
         name: update-servicenow-ticket
       params:
-        - name: state
+        - name: status
           value: deploying
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
@@ -83,7 +83,7 @@ spec:
       taskRef:
         name: update-servicenow-ticket
       params:
-        - name: state
+        - name: status
           value: deployed
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
@@ -103,7 +103,7 @@ spec:
       taskRef:
         name: update-servicenow-ticket
       params:
-        - name: state
+        - name: status
           value: complete
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
@@ -114,7 +114,7 @@ spec:
       taskRef:
         name: update-servicenow-ticket
       params:
-        - name: state
+        - name: status
           value: failed
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
