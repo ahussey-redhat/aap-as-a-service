@@ -120,8 +120,12 @@ spec:
       params:
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
-        - name: maxHosts
-          value: "$(params.maxHosts)"
+        - name: owner
+          value: "$(params.owner)"
+        - name: branchName
+          value: "$(params.branchName)"
+        - name: teamName
+          value: "$(params.teamName)"
       runAfter:
         - update-servicenow-ticket-deployed
     - name: update-servicenow-ticket-complete
