@@ -42,6 +42,7 @@ spec:
       resources: {}
       script: |
         #!/usr/bin/env bash
+        set -euxo pipefail
 
         [[ "$(workspaces.manifest-dir.bound)" == "true" ]] && \
         cd $(workspaces.manifest-dir.path)
@@ -74,6 +75,7 @@ spec:
       resources: {}
       script: |
         #!/usr/bin/env bash
+        set -euxo pipefail
 
         cd environments/${branchName}-${teamName}-${instanceNumber}
 
@@ -87,6 +89,7 @@ spec:
       resources: {}
       script: |
         #!/usr/bin/env bash
+        set -euxo pipefail
       
         git config --global user.name $(params.owner)
         git config --global user.email $(params.owner)@example.com
@@ -104,6 +107,7 @@ spec:
       resources: {}
       script: |
         #!/usr/bin/env bash
+        set -euxo pipefail
 
         [[ "$(workspaces.manifest-dir.bound)" == "true" ]] && \
         cd $(workspaces.manifest-dir.path)
