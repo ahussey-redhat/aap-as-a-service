@@ -66,9 +66,17 @@ spec:
         name: update-servicenow-ticket
       params:
         - name: status
-          value: deploying
+          value: initiating
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
+        - name: owner
+          value: "$(params.owner)"
+        - name: branchName
+          value: "$(params.branchName)"
+        - name: teamName
+          value: "$(params.teamName)"
+        - name: instanceID
+          value: "$(params.instanceID)"
       runAfter:
         - clone-argocd-repository
     - name: deploy-aap-instance
@@ -84,9 +92,17 @@ spec:
         name: update-servicenow-ticket
       params:
         - name: status
-          value: deployed
+          value: initiating
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
+        - name: owner
+          value: "$(params.owner)"
+        - name: branchName
+          value: "$(params.branchName)"
+        - name: teamName
+          value: "$(params.teamName)"
+        - name: instanceID
+          value: "$(params.instanceID)"
       runAfter:
         - deploy-aap-instance
     - name: conduct-day2-ops
@@ -104,9 +120,17 @@ spec:
         name: update-servicenow-ticket
       params:
         - name: status
-          value: complete
+          value: initiating
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
+        - name: owner
+          value: "$(params.owner)"
+        - name: branchName
+          value: "$(params.branchName)"
+        - name: teamName
+          value: "$(params.teamName)"
+        - name: instanceID
+          value: "$(params.instanceID)"
       runAfter:
         - conduct-day2-ops
   finally:
@@ -115,6 +139,14 @@ spec:
         name: update-servicenow-ticket
       params:
         - name: status
-          value: failed
+          value: initiating
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
+        - name: owner
+          value: "$(params.owner)"
+        - name: branchName
+          value: "$(params.branchName)"
+        - name: teamName
+          value: "$(params.teamName)"
+        - name: instanceID
+          value: "$(params.instanceID)"
