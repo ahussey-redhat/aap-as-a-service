@@ -40,11 +40,14 @@ spec:
       - name: instanceID
         value: $(tt.params.instanceID)
       workspaces:
-      - name: working-directory
-        volumeClaimTemplate:
-          spec:
-            accessModes:
-              - ReadWriteOnce
-            resources:
-              requests:
-                storage: 1Gi
+        - name: ssh-creds
+          secret:
+            secretName: argocd-github-ssh
+        - name: working-directory
+          volumeClaimTemplate:
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 1Gi
