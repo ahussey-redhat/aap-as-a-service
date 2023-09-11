@@ -12,7 +12,7 @@ spec:
             - name: "overlays"
               value:
                 - key: owner
-                  value: "body.author"
+                  expression: "body.author"
       bindings:
         - name: owner
           value: $(extensions.owner)
