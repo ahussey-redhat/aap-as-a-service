@@ -82,6 +82,15 @@ spec:
     - name: deploy-aap-instance
       taskRef:
         name: deploy-aap-instance
+      params:
+        - name: serviceNowIncidentID
+          value: "$(params.serviceNowIncidentID)"
+        - name: owner
+          value: "$(params.owner)"
+        - name: branchName
+          value: "$(params.branchName)"
+        - name: teamName
+          value: "$(params.teamName)"
       runAfter:
         - update-servicenow-ticket-deploy
       workspaces:
