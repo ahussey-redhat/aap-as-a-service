@@ -13,12 +13,22 @@ spec:
               value:
                 - key: owner
                   expression: "body.author"
+                - key: serviceNowIncidentID
+                  expression: "body.serviceNowIncidentID"
+                - key: branchName
+                  expression: "body.branchName"
+                - key: teamName
+                  expression: "body.teamName"
+                - key: maxHosts
+                  expression: "body.maxHosts"
+                - key: instanceID
+                  expression: "body.instanceID"
       bindings:
         - name: owner
           value: $(extensions.owner)
         - name: serviceNowIncidentID
           value: $(extensions.serviceNowIncidentID)
-        - name: brancName
+        - name: branchName
           value: $(extensions.branchName)
         - name: teamName
           value: $(extensions.teamName)
