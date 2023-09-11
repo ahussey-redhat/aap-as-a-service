@@ -36,7 +36,39 @@ spec:
       type: string
   steps:
     # Create environment, and update appropriate variables for the AAP instance
-    - name: kustomize-aap-instance
+    - name: kustomize-aap-instance-gitops
+      image: >-
+        image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+
+        [[ "$(workspaces.manifest-dir.bound)" == "true" ]] && \
+        cd $(workspaces.manifest-dir.path)
+
+        [[ "$(workspaces.kubeconfig-dir.bound)" == "true" ]] && \
+        [[ -f $(workspaces.kubeconfig-dir.path)/kubeconfig ]] && \
+        export KUBECONFIG=$(workspaces.kubeconfig-dir.path)/kubeconfig
+
+        cd environments/${branchName}-${teamName}-${instanceNumber}
+
+        # Configure AAP ArgoCD application name
+        oc kustomize edit set metadata.name=${branchName}-${teamName}-${instanceNumber} environments/${branchName}-${teamName}/${instanceNumber}/application.yml
+        # Configure AAP ArgoCD application namespace
+        oc kustomize edit set metadata.namespace=${branchName}-${teamName} environments/${branchName}-${teamName}/${instanceNumber}/application.yml
+
+        # Configure AAP application namespace
+        oc kustomize edit set namespace=${branchName}-${teamName} environments/${branchName}-${teamName}/${instanceNumber}/kustomization.yaml
+        
+        # Configure ArgoCD application labels
+        oc kustomize edit set metadata.labels.servicenowincidentid=${serviceNowIncidentID} environments/${branchName}-${teamName}/${instanceNumber}/application.yml
+        oc kustomize edit set metadata.labels.owner=${owner} environments/${branchName}-${teamName}/${instanceNumber}/application.yml
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+
+    # Perform operations that require YQ
+    - name: edit-aap-instance-gitops-application
       image: >-
         registry.redhat.io/devspaces/udi-rhel8:latest
       resources: {}
@@ -44,18 +76,6 @@ spec:
         #!/usr/bin/env bash
 
         cd environments/${branchName}-${teamName}-${instanceNumber}
-
-        # Configure AAP ArgoCD application name
-        kustomize edit set metadata.name=${branchName}-${teamName}-${instanceNumber} environments/${branchName}-${teamName}/${instanceNumber}/application.yml
-        # Configure AAP ArgoCD application namespace
-        kustomize edit set metadata.namespace=${branchName}-${teamName} environments/${branchName}-${teamName}/${instanceNumber}/application.yml
-
-        # Configure AAP application namespace
-        kustomize edit set namespace=${branchName}-${teamName} environments/${branchName}-${teamName}/${instanceNumber}/kustomization.yaml
-        
-        # Configure ArgoCD application labels
-        kustomize edit set metadata.labels.servicenowincidentid=${serviceNowIncidentID} environments/${branchName}-${teamName}/${instanceNumber}/application.yml
-        kustomize edit set metadata.labels.owner=${owner} environments/${branchName}-${teamName}/${instanceNumber}/application.yml
 
         # Configure AAP instance name
         yq -ei '.metadata.name = "${branchName}-${teamName}-${instanceNumber}"' environments/${branchName}-${teamName}/${instanceNumber}/aap-instance/base/instance.yml
