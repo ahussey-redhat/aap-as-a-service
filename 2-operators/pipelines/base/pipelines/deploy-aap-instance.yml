@@ -29,6 +29,9 @@ spec:
     - name: owner
       type: string
       description: Owner of the SericeNow request/AAP instance
+    - name: instanceID
+      type: string
+      description: Iterative number associated with this AAP instance
   tasks:
     - name: update-servicenow-ticket-init
       taskRef:
@@ -38,6 +41,14 @@ spec:
           value: initiating
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
+        - name: owner
+          value: "$(params.owner)"
+        - name: branchName
+          value: "$(params.branchName)"
+        - name: teamName
+          value: "$(params.teamName)"
+        - name: instanceID
+          value: "$(params.instanceID)"
     - name: clone-argocd-repository
       taskRef:
         kind: ClusterTask

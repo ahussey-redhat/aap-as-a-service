@@ -1,27 +1,38 @@
+# WIP
+# This should:
+# 1. Update a ServiceNow incident with a specific status about the AAP instance being managed
 apiVersion: tekton.dev/v1
-kind: TaskRun
+kind: Task
 metadata:
-  generateName: step-update-servicenow-ticket-
+  name: update-servicenow-ticket
 spec:
-  taskSpec:
-    params:
-    - name: salesforceID
-    - name: branchOrTeamName
-      default: param-value
-    - name: instanceID
-      default: 1
-    steps:
-    - name: bash
-      image: ubuntu
-      env:
-      - name: FOO
-        value: foooooooo
+  params:
+  - name: serviceNowIncidentID
+    description: The ServiceNow Incident ID number
+    type: string
+  - name: owner
+    description: The requester of the AAP instance
+    type: string
+  - name: branchName
+    description: The name of the Branch the requester belongs to
+    type: string
+  - name: teamName
+    description: The name of the Team the requester belongs to
+    type: string
+  - name: instanceID
+    description: The unique number associated with this instance
+    type: string
+  - name: status
+    description: The status to update the incident with
+    type: string
+  steps:
+    - name: update-incident
+      resources: {}
+      image: >-
+        registry.redhat.io/devspaces/udi-rhel8:latest
       script: |
         #!/usr/bin/env bash
         set -euxo pipefail
-        echo "Updating ServiceNow ticket"
-        echo FOO is ${FOO}
-        echo substring is ${FOO:2:4}
-        for i in {1..10}; do
-          echo line $i
-        done
+        echo "Updating ServiceNow ticket: $(params.serviceNowIncidentID) with status: $(params.status)"
+        echo "$(params.branchName)/$(params.teamName)/$(params.owner) requesting AAP instance: $(params.instanceID)"
+        echo "Currently this is a NOOP"

@@ -7,3 +7,4 @@ namespace: aap-as-a-service
 resources:
   - deploy-aap-instance.yml
   - conduct-day2-ops.yml
+  - update-servicenow-ticket.yml

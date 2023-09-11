@@ -24,5 +24,7 @@ spec:
           value: $(extensions.teamName)
         - name: maxHosts
           value: $(extensions.maxHosts)
+        - name: instanceID
+          value: $(extensions.instanceID)
       template:
         ref: deploy-aap-instance
