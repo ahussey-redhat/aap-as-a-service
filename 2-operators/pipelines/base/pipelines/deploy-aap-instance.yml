@@ -64,7 +64,7 @@ spec:
       taskRef:
         name: deploy-aap-instance
       runAfter:
-        - clone-argocd-repository
+        - update-servicenow-ticket-deploy
       workspaces:
         - name: output
           workspace: working-directory
@@ -78,7 +78,6 @@ spec:
           value: "$(params.serviceNowIncidentID)"
       runAfter:
         - deploy-aap-instance
-        - update-servicenow-ticket-deploy
     - name: conduct-day2-ops
       taskRef:
         name: day2-ops
