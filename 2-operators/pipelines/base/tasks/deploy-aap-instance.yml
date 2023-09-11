@@ -110,5 +110,9 @@ spec:
       name: kubeconfig-dir
       optional: true
     - description: >-
+        The workspace which contains the SSH configuration and certificates.
+      name: ssh-directory
+      optional: true
+    - description: >-
         The workspace which contains the ArgoCD cloned git repository
       name: output
