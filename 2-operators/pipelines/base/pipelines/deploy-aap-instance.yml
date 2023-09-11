@@ -91,7 +91,7 @@ spec:
         - deploy-aap-instance
     - name: conduct-day2-ops
       taskRef:
-        name: day2-ops
+        name: conduct-day2-ops
       params:
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
