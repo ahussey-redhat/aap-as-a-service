@@ -111,4 +111,4 @@ spec:
       optional: true
     - description: >-
         The workspace which contains the ArgoCD cloned git repository
-      name: argocd-dir
+      name: output
