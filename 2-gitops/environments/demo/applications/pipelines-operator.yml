@@ -8,7 +8,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "2"
 spec:
   destination:
-    namespace: openshift-operators
+    namespace: openshift-pipelines
     server: 'https://kubernetes.default.svc'
   project: default
   source:
@@ -18,7 +18,7 @@ spec:
     targetRevision: main
   syncPolicy:
     automated:
-      prune: false
+      prune: true
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
