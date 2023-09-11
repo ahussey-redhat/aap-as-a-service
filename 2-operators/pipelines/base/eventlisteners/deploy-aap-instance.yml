@@ -11,7 +11,7 @@ spec:
           params:
             - name: "overlays"
               value:
-                - key: "owner"
+                - key: owner
                   value: "body.author"
       bindings:
         - name: owner
