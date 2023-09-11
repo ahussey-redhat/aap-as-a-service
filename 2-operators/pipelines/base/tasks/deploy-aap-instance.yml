@@ -6,7 +6,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   annotations:
-    tekton.dev/displayName: deploy aap instance
+    tekton.dev/displayName: Deploy a AAP instance
     tekton.dev/pipelines.minVersion: 0.17.0
     tekton.dev/tags: aap
   name: deploy-aap-instance
