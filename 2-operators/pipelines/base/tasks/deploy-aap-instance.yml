@@ -63,23 +63,23 @@ spec:
         [[ -f $(workspaces.kubeconfig-dir.path)/kubeconfig ]] && \
         export KUBECONFIG=$(workspaces.kubeconfig-dir.path)/kubeconfig
 
-        if [[ ! -d environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_NUMBER} ]]; then
-          cp environments/templates environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_NUMBER}
+        if [[ ! -d environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} ]]; then
+          cp environments/templates environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
         fi
 
-        cd environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_NUMBER}
+        cd environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
 
         # Configure AAP ArgoCD application name
-        oc kustomize edit set metadata.name=${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_NUMBER} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_NUMBER}/application.yml
+        oc kustomize edit set metadata.name=${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_ID}/application.yml
         # Configure AAP ArgoCD application namespace
-        oc kustomize edit set metadata.namespace=${BRANCH_NAME}-${TEAM_NAME} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_NUMBER}/application.yml
+        oc kustomize edit set metadata.namespace=${BRANCH_NAME}-${TEAM_NAME} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_ID}/application.yml
 
         # Configure AAP application namespace
-        oc kustomize edit set namespace=${BRANCH_NAME}-${TEAM_NAME} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_NUMBER}/kustomization.yaml
+        oc kustomize edit set namespace=${BRANCH_NAME}-${TEAM_NAME} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_ID}/kustomization.yaml
         
         # Configure ArgoCD application labels
-        oc kustomize edit set metadata.labels.servicenowincidentid=${SERVICE_NOW_INCIDENT_ID} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_NUMBER}/application.yml
-        oc kustomize edit set metadata.labels.owner=${owner} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_NUMBER}/application.yml
+        oc kustomize edit set metadata.labels.servicenowincidentid=${SERVICE_NOW_INCIDENT_ID} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_ID}/application.yml
+        oc kustomize edit set metadata.labels.owner=${owner} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_ID}/application.yml
       securityContext:
         runAsNonRoot: true
         runAsUser: 65532
@@ -99,10 +99,10 @@ spec:
         export OWNER=$(params.owner)
         export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
 
-        cd environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_NUMBER}
+        cd environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
 
         # Configure AAP instance name
-        yq -ei '.metadata.name = "${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_NUMBER}"' environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_NUMBER}/aap-instance/base/instance.yml
+        yq -ei '.metadata.name = "${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}"' environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_ID}/aap-instance/base/instance.yml
 
     # Push changes to ArgoCD repo
     - name: git-push
@@ -122,7 +122,7 @@ spec:
         git config --global user.name ${OWNER}
         git config --global user.email ${OWNER}@example.com
         git add --all
-        git commit -m "Add ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_NUMBER} environment"
+        git commit -m "Add ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} environment"
         git push -u origin main -f
 
     # Create AAP application in ArgoCD
@@ -150,7 +150,7 @@ spec:
         [[ -f $(workspaces.kubeconfig-dir.path)/kubeconfig ]] && \
         export KUBECONFIG=$(workspaces.kubeconfig-dir.path)/kubeconfig
 
-        oc apply -f environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_NUMBER}/application.yml
+        oc apply -f environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}/application.yml
       securityContext:
         runAsNonRoot: true
         runAsUser: 65532
