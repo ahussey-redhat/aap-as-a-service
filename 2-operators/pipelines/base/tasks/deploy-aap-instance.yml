@@ -96,24 +96,24 @@ spec:
         cd $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
 
         # Configure AAP ArgoCD application name
-        yq -eiy '.metadata.name |= envsubst' application.yml
+        yq -eiy ".metadata.name |= envsubst" application.yml
 
         # Configure AAP ArgoCD application namespace
-        yq -eiy '.metadata.namespace |= envsubst' application.yml
+        yq -eiy ".metadata.namespace |= envsubst" application.yml
 
         # Configure destination namespace
-        yq -eiy '.spec.destination.namespace |= envsubst' application.yml
+        yq -eiy ".spec.destination.namespace |= envsubst" application.yml
 
         # Configure environment path
-        yq -eiy '.spec.source.path |= envsubst' application.yml
+        yq -eiy ".spec.source.path |= envsubst" application.yml
 
         # Configure ArgoCD application labels
-        yq -eiy '.metadata.labels.servicenowincidentid |= envsubst' application.yml
-        yq -eiy '.metadata.labels.owner |= envsubst' application.yml
+        yq -eiy ".metadata.labels.servicenowincidentid |= envsubst" application.yml
+        yq -eiy ".metadata.labels.owner |= envsubst" application.yml
 
         # Configure AAP instance name
-        yq -eiy '.metadata.name |= envsubst' aap-instance/base/instance.yml
-        yq -eiy '.namespace |= envsubst' kustomization.yaml
+        yq -eiy ".metadata.name |= envsubst" aap-instance/base/instance.yml
+        yq -eiy ".namespace |= envsubst" kustomization.yaml
 
     # Push changes to ArgoCD repo
     - name: git-push
