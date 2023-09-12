@@ -46,11 +46,12 @@ spec:
       script: |
         #!/usr/bin/env bash
         set -euxo pipefail
-        branchName=$(params.branchName)
-        teamName=$(params.teamName)
-        instanceNumber=$(params.instanceNumber)
-        owner=$(params.owner)
-        serviceNowIncidentID=$(params.serviceNowIncidentID)
+
+        BRANCH_NAME=$(params.branchName)
+        TEAM_NAME=$(params.teamName)
+        INSTANCE_NUMBER=$(params.instanceNumber)
+        OWNER=$(params.owner)
+        SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
 
         [[ "$(workspaces.manifest-dir.bound)" == "true" ]] && \
         cd $(workspaces.manifest-dir.path)
@@ -59,23 +60,23 @@ spec:
         [[ -f $(workspaces.kubeconfig-dir.path)/kubeconfig ]] && \
         export KUBECONFIG=$(workspaces.kubeconfig-dir.path)/kubeconfig
 
-        if [[ ! -d environments/${branchName}-${teamName}-${instanceNumber} ]]; then
-          cp environments/templates environments/${branchName}-${teamName}-${instanceNumber}
+        if [[ ! -d environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_NUMBER} ]]; then
+          cp environments/templates environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_NUMBER}
         fi
 
-        cd environments/${branchName}-${teamName}-${instanceNumber}
+        cd environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_NUMBER}
 
         # Configure AAP ArgoCD application name
-        oc kustomize edit set metadata.name=${branchName}-${teamName}-${instanceNumber} environments/${branchName}-${teamName}/${instanceNumber}/application.yml
+        oc kustomize edit set metadata.name=${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_NUMBER} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_NUMBER}/application.yml
         # Configure AAP ArgoCD application namespace
-        oc kustomize edit set metadata.namespace=${branchName}-${teamName} environments/${branchName}-${teamName}/${instanceNumber}/application.yml
+        oc kustomize edit set metadata.namespace=${BRANCH_NAME}-${TEAM_NAME} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_NUMBER}/application.yml
 
         # Configure AAP application namespace
-        oc kustomize edit set namespace=${branchName}-${teamName} environments/${branchName}-${teamName}/${instanceNumber}/kustomization.yaml
+        oc kustomize edit set namespace=${BRANCH_NAME}-${TEAM_NAME} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_NUMBER}/kustomization.yaml
         
         # Configure ArgoCD application labels
-        oc kustomize edit set metadata.labels.servicenowincidentid=${serviceNowIncidentID} environments/${branchName}-${teamName}/${instanceNumber}/application.yml
-        oc kustomize edit set metadata.labels.owner=${owner} environments/${branchName}-${teamName}/${instanceNumber}/application.yml
+        oc kustomize edit set metadata.labels.servicenowincidentid=${SERVICE_NOW_INCIDENT_ID} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_NUMBER}/application.yml
+        oc kustomize edit set metadata.labels.owner=${owner} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_NUMBER}/application.yml
       securityContext:
         runAsNonRoot: true
         runAsUser: 65532
@@ -89,10 +90,16 @@ spec:
         #!/usr/bin/env bash
         set -euxo pipefail
 
-        cd environments/${branchName}-${teamName}-${instanceNumber}
+        BRANCH_NAME=$(params.branchName)
+        TEAM_NAME=$(params.teamName)
+        INSTANCE_NUMBER=$(params.instanceNumber)
+        OWNER=$(params.owner)
+        SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
+
+        cd environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_NUMBER}
 
         # Configure AAP instance name
-        yq -ei '.metadata.name = "${branchName}-${teamName}-${instanceNumber}"' environments/${branchName}-${teamName}/${instanceNumber}/aap-instance/base/instance.yml
+        yq -ei '.metadata.name = "${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_NUMBER}"' environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_NUMBER}/aap-instance/base/instance.yml
 
     # Push changes to ArgoCD repo
     - name: git-push
@@ -102,11 +109,17 @@ spec:
       script: |
         #!/usr/bin/env bash
         set -euxo pipefail
-      
-        git config --global user.name $(params.owner)
-        git config --global user.email $(params.owner)@example.com
+
+        BRANCH_NAME=$(params.branchName)
+        TEAM_NAME=$(params.teamName)
+        INSTANCE_NUMBER=$(params.instanceNumber)
+        OWNER=$(params.owner)
+        SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
+
+        git config --global user.name ${OWNER}
+        git config --global user.email ${OWNER}@example.com
         git add --all
-        git commit -m "Add ${branchName}-${teamName}-${instanceNumber} environment"
+        git commit -m "Add ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_NUMBER} environment"
         git push -u origin main -f
 
     # Create AAP application in ArgoCD
@@ -121,6 +134,12 @@ spec:
         #!/usr/bin/env bash
         set -euxo pipefail
 
+        BRANCH_NAME=$(params.branchName)
+        TEAM_NAME=$(params.teamName)
+        INSTANCE_NUMBER=$(params.instanceNumber)
+        OWNER=$(params.owner)
+        SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
+
         [[ "$(workspaces.manifest-dir.bound)" == "true" ]] && \
         cd $(workspaces.manifest-dir.path)
 
@@ -128,7 +147,7 @@ spec:
         [[ -f $(workspaces.kubeconfig-dir.path)/kubeconfig ]] && \
         export KUBECONFIG=$(workspaces.kubeconfig-dir.path)/kubeconfig
 
-        oc apply -f environments/${branchName}-${teamName}-${instanceNumber}/application.yml
+        oc apply -f environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_NUMBER}/application.yml
       securityContext:
         runAsNonRoot: true
         runAsUser: 65532
