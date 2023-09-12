@@ -94,6 +94,8 @@ spec:
           value: "$(params.branchName)"
         - name: teamName
           value: "$(params.teamName)"
+        - name: instanceID
+          value: "$(params.instanceID)"
       runAfter:
         - update-servicenow-ticket-deploy
       workspaces:
@@ -131,6 +133,8 @@ spec:
           value: "$(params.branchName)"
         - name: teamName
           value: "$(params.teamName)"
+        - name: instanceID
+          value: "$(params.instanceID)"
       runAfter:
         - update-servicenow-ticket-deployed
     - name: update-servicenow-ticket-complete
