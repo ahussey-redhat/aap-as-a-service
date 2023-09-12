@@ -35,7 +35,7 @@ spec:
       name: serviceNowIncidentID
       type: string
     - description: AAP instance number
-      name: instanceNumber
+      name: instanceID
       type: string
   steps:
     # Create environment, and update appropriate variables for the AAP instance
@@ -52,7 +52,7 @@ spec:
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
-        export INSTANCE_NUMBER=$(params.instanceNumber)
+        export INSTANCE_ID=$(params.instanceID)
         export OWNER=$(params.owner)
         export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
 
@@ -95,7 +95,7 @@ spec:
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
-        export INSTANCE_NUMBER=$(params.instanceNumber)
+        export INSTANCE_ID=$(params.instanceID)
         export OWNER=$(params.owner)
         export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
 
@@ -115,7 +115,7 @@ spec:
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
-        export INSTANCE_NUMBER=$(params.instanceNumber)
+        export INSTANCE_ID=$(params.instanceID)
         export OWNER=$(params.owner)
         export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
 
@@ -139,7 +139,7 @@ spec:
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
-        export INSTANCE_NUMBER=$(params.instanceNumber)
+        export INSTANCE_ID=$(params.instanceID)
         export OWNER=$(params.owner)
         export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
 
