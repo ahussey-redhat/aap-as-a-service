@@ -95,6 +95,9 @@ spec:
 
         cd $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
 
+        # Debug YQ
+        yq --version
+
         # Configure AAP ArgoCD application name
         yq -eiy ".metadata.name |= envsubst" application.yml
 
