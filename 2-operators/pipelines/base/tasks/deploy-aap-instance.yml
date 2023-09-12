@@ -73,7 +73,7 @@ spec:
         ls -als
 
         # Configure AAP application namespace 
-        oc kustomize edit set namespace="${BRANCH_NAME}-${TEAM_NAME}" kustomization.yaml
+        oc kustomize edit set namespace="${BRANCH_NAME}-${TEAM_NAME}"
       securityContext:
         runAsNonRoot: true
         runAsUser: 65532
