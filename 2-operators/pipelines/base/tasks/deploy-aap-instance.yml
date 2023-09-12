@@ -37,12 +37,20 @@ spec:
   steps:
     # Create environment, and update appropriate variables for the AAP instance
     - name: kustomize-aap-instance-gitops
+      env:
+        - name: HOME
+          value: /tekton/home
       image: >-
         image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
       resources: {}
       script: |
         #!/usr/bin/env bash
         set -euxo pipefail
+        branchName=$(params.branchName)
+        teamName=$(params.teamName)
+        instanceNumber=$(params.instanceNumber)
+        owner=$(params.owner)
+        serviceNowIncidentID=$(params.serviceNowIncidentID)
 
         [[ "$(workspaces.manifest-dir.bound)" == "true" ]] && \
         cd $(workspaces.manifest-dir.path)
@@ -50,6 +58,10 @@ spec:
         [[ "$(workspaces.kubeconfig-dir.bound)" == "true" ]] && \
         [[ -f $(workspaces.kubeconfig-dir.path)/kubeconfig ]] && \
         export KUBECONFIG=$(workspaces.kubeconfig-dir.path)/kubeconfig
+
+        if [[ ! -d environments/${branchName}-${teamName}-${instanceNumber} ]]; then
+          cp environments/templates environments/${branchName}-${teamName}-${instanceNumber}
+        fi
 
         cd environments/${branchName}-${teamName}-${instanceNumber}
 
