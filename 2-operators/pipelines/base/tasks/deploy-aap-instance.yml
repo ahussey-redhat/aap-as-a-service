@@ -69,17 +69,8 @@ spec:
 
         cd $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
 
-        # Configure AAP ArgoCD application name
-        oc kustomize edit set metadata.name=${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_ID}/application.yml
-        # Configure AAP ArgoCD application namespace
-        oc kustomize edit set metadata.namespace=${BRANCH_NAME}-${TEAM_NAME} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_ID}/application.yml
-
         # Configure AAP application namespace 
-        oc kustomize edit set namespace=${BRANCH_NAME}-${TEAM_NAME} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_ID}/kustomization.yaml
-        
-        # Configure ArgoCD application labels
-        oc kustomize edit set metadata.labels.servicenowincidentid=${SERVICE_NOW_INCIDENT_ID} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_ID}/application.yml
-        oc kustomize edit set metadata.labels.owner=${owner} environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_ID}/application.yml
+        oc kustomize edit set namespace=${BRANCH_NAME}-${TEAM_NAME} kustomization.yaml
       securityContext:
         runAsNonRoot: true
         runAsUser: 65532
@@ -101,8 +92,16 @@ spec:
 
         cd $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
 
+        # Configure AAP ArgoCD application name
+        yq -ei 'metadata.name = "${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}"' application.yml
+        # Configure AAP ArgoCD application namespace
+        yq -ei 'metadata.namespace = "${BRANCH_NAME}-${TEAM_NAME}"' application.yml
+        # Configure ArgoCD application labels
+        yq -ei 'metadata.labels.servicenowincidentid = "${SERVICE_NOW_INCIDENT_ID}"' application.yml
+        yq -ei 'metadata.labels.owner = "${owner}"' application.yml
+
         # Configure AAP instance name
-        yq -ei '.metadata.name = "${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}"' environments/${BRANCH_NAME}-${TEAM_NAME}/${INSTANCE_ID}/aap-instance/base/instance.yml
+        yq -ei '.metadata.name = "${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}"' aap-instance/base/instance.yml
 
     # Push changes to ArgoCD repo
     - name: git-push
