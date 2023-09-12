@@ -73,7 +73,7 @@ spec:
         ls -als
 
         # Configure AAP application namespace 
-        oc kustomize edit set namespace="${BRANCH_NAME}-${TEAM_NAME}"
+        #oc kustomize edit set namespace="${BRANCH_NAME}-${TEAM_NAME}"
       securityContext:
         runAsNonRoot: true
         runAsUser: 65532
@@ -105,6 +105,7 @@ spec:
 
         # Configure AAP instance name
         yq -ei '.metadata.name = "${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}"' aap-instance/base/instance.yml
+        yq -ei '.namespace = "${BRANCH_NAME}-${TEAM_NAME}"' kustomization.yaml
 
     # Push changes to ArgoCD repo
     - name: git-push
