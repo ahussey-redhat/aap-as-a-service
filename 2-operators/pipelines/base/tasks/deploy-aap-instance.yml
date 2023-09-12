@@ -34,6 +34,9 @@ spec:
     - description: ServiceNow incident ID
       name: serviceNowIncidentID
       type: string
+    - description: AAP instance number
+      name: instanceNumber
+      type: string
   steps:
     # Create environment, and update appropriate variables for the AAP instance
     - name: kustomize-aap-instance-gitops
@@ -47,11 +50,11 @@ spec:
         #!/usr/bin/env bash
         set -euxo pipefail
 
-        BRANCH_NAME=$(params.branchName)
-        TEAM_NAME=$(params.teamName)
-        INSTANCE_NUMBER=$(params.instanceNumber)
-        OWNER=$(params.owner)
-        SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
+        export BRANCH_NAME=$(params.branchName)
+        export TEAM_NAME=$(params.teamName)
+        export INSTANCE_NUMBER=$(params.instanceNumber)
+        export OWNER=$(params.owner)
+        export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
 
         [[ "$(workspaces.manifest-dir.bound)" == "true" ]] && \
         cd $(workspaces.manifest-dir.path)
@@ -90,11 +93,11 @@ spec:
         #!/usr/bin/env bash
         set -euxo pipefail
 
-        BRANCH_NAME=$(params.branchName)
-        TEAM_NAME=$(params.teamName)
-        INSTANCE_NUMBER=$(params.instanceNumber)
-        OWNER=$(params.owner)
-        SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
+        export BRANCH_NAME=$(params.branchName)
+        export TEAM_NAME=$(params.teamName)
+        export INSTANCE_NUMBER=$(params.instanceNumber)
+        export OWNER=$(params.owner)
+        export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
 
         cd environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_NUMBER}
 
@@ -110,11 +113,11 @@ spec:
         #!/usr/bin/env bash
         set -euxo pipefail
 
-        BRANCH_NAME=$(params.branchName)
-        TEAM_NAME=$(params.teamName)
-        INSTANCE_NUMBER=$(params.instanceNumber)
-        OWNER=$(params.owner)
-        SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
+        export BRANCH_NAME=$(params.branchName)
+        export TEAM_NAME=$(params.teamName)
+        export INSTANCE_NUMBER=$(params.instanceNumber)
+        export OWNER=$(params.owner)
+        export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
 
         git config --global user.name ${OWNER}
         git config --global user.email ${OWNER}@example.com
@@ -134,11 +137,11 @@ spec:
         #!/usr/bin/env bash
         set -euxo pipefail
 
-        BRANCH_NAME=$(params.branchName)
-        TEAM_NAME=$(params.teamName)
-        INSTANCE_NUMBER=$(params.instanceNumber)
-        OWNER=$(params.owner)
-        SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
+        export BRANCH_NAME=$(params.branchName)
+        export TEAM_NAME=$(params.teamName)
+        export INSTANCE_NUMBER=$(params.instanceNumber)
+        export OWNER=$(params.owner)
+        export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
 
         [[ "$(workspaces.manifest-dir.bound)" == "true" ]] && \
         cd $(workspaces.manifest-dir.path)
