@@ -96,16 +96,16 @@ spec:
         cd $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
 
         # Configure AAP ArgoCD application name
-        yq -eiy 'metadata.name = "${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}"' application.yml
+        yq -eiy 'metadata.name = "env(BRANCH_NAME)-env(TEAM_NAME)-env(INSTANCE_ID)"' application.yml
         # Configure AAP ArgoCD application namespace
-        yq -eiy 'metadata.namespace = "${BRANCH_NAME}-${TEAM_NAME}"' application.yml
+        yq -eiy 'metadata.namespace = "env(BRANCH_NAME)-env(TEAM_NAME)"' application.yml
         # Configure ArgoCD application labels
-        yq -eiy 'metadata.labels.servicenowincidentid = "${SERVICE_NOW_INCIDENT_ID}"' application.yml
-        yq -eiy 'metadata.labels.owner = "${owner}"' application.yml
+        yq -eiy 'metadata.labels.servicenowincidentid = "env(SERVICE_NOW_INCIDENT_ID)"' application.yml
+        yq -eiy 'metadata.labels.owner = "env(owner)"' application.yml
 
         # Configure AAP instance name
-        yq -eiy '.metadata.name = "${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}"' aap-instance/base/instance.yml
-        yq -eiy '.namespace = "${BRANCH_NAME}-${TEAM_NAME}"' kustomization.yaml
+        yq -eiy '.metadata.name = "env(BRANCH_NAME)-emv(TEAM_NAME)-env(INSTANCE_ID)"' aap-instance/base/instance.yml
+        yq -eiy '.namespace = "env(BRANCH_NAME)-env(TEAM_NAME)"' kustomization.yaml
 
     # Push changes to ArgoCD repo
     - name: git-push
