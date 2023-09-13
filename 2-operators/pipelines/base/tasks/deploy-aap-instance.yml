@@ -63,6 +63,11 @@ spec:
         [[ -f $(workspaces.kubeconfig-dir.path)/kubeconfig ]] && \
         export KUBECONFIG=$(workspaces.kubeconfig-dir.path)/kubeconfig
 
+        if [[ -d environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} ]]; then
+          echo "AAP instance for ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} already exists."
+          exit 1
+        fi
+
         if [[ ! -d environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} ]]; then
           cp -r $(workspaces.output.path)/environments/template $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
         fi
@@ -142,7 +147,7 @@ spec:
         # debug
         git remote -v
 
-        git fetch --all
+        git fetch
         git checkout -b main
         git branch --set-upstream-to=origin/main main
         git add --all
