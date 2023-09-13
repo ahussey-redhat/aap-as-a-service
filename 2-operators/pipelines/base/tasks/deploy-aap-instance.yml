@@ -114,6 +114,9 @@ spec:
         # Configure AAP instance name
         yq -ei ".metadata.name |= envsubst" aap-instance/base/instance.yml
         yq -ei ".namespace |= envsubst" kustomization.yaml
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
 
     # Push changes to ArgoCD repo
     - name: git-push
