@@ -142,11 +142,7 @@ spec:
         git config --global user.email "${OWNER}@example.com"
 
         # Configure SSH keys
-        git config core.sshCommand "ssh -vT -i $(workspaces.ssh-directory.path)/id_rsa -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
-
-        # debug
-        #git remote -v
-        #ssh -vT -i $(workspaces.ssh-directory.path)/id_rsa -o IdentitiesOnly=yes git@github.com
+        git config core.sshCommand "ssh -v-i $(workspaces.ssh-directory.path)/id_rsa -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
 
         git fetch --all
         git checkout -b main
@@ -157,6 +153,7 @@ spec:
 
     # Create AAP application in ArgoCD
     - name: deploy-aap-instance
+      serviceAccountName: deployer
       env:
         - name: HOME
           value: /tekton/home
