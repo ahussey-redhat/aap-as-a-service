@@ -65,7 +65,8 @@ spec:
 
         if [[ -d environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} ]]; then
           echo "AAP instance for ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} already exists."
-          exit 1
+          # publish result that says instance already exists
+          exit 0
         fi
 
         if [[ ! -d environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} ]]; then
@@ -146,7 +147,7 @@ spec:
         git config --global user.email "${OWNER}@example.com"
 
         # Configure SSH keys
-        git config core.sshCommand "ssh -v-i $(workspaces.ssh-directory.path)/id_rsa -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
+        git config core.sshCommand "ssh -v -i $(workspaces.ssh-directory.path)/id_rsa -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
 
         git fetch --all
         git checkout -b main
