@@ -23,6 +23,9 @@ spec:
     metadata:
       generateName: deploy-aap-instance-$(tt.params.branchName)-$(tt.params.teamName)-$(tt.params.instanceID)-
     spec:
+      taskRunSpecs:
+        - pipelineTaskName: deploy-aap-instance
+          serviceAccountName: deployer
       serviceAccountName: pipeline
       pipelineRef:
         name: deploy-aap-instance

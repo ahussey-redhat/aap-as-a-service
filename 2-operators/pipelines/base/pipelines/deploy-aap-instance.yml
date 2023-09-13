@@ -104,7 +104,6 @@ spec:
         - name: ssh-directory
           workspace: ssh-creds
     - name: deploy-aap-instance
-      serviceAccountName: deployer
       taskRef:
         name: deploy-aap-instance
       params:
