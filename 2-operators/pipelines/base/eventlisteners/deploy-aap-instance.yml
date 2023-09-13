@@ -6,6 +6,10 @@ spec:
   triggers:
     - name: servicenow-webhook
       interceptors:
+        # - name: "secretRef"
+        #   value:
+        #     secretName: webhook-secret
+        #     secretKey: secretToken
         - ref:
             name: cel
           params:

@@ -34,7 +34,7 @@
     - name: configure argocd initial application
       kubernetes.core.k8s:
         template: "argocd/application.yml"
-    
+
     - name: configure SSH secret
       kubernetes.core.k8s:
         resource_definition:
@@ -98,3 +98,21 @@
             namespace: aap-as-a-service
           secrets:
             - name: argocd-github-ssh
+
+    - name: configure webhook secret
+      kubernetes.core.k8s:
+        resource_definition:
+          kind: Secret
+          apiVersion: v1
+          metadata:
+            name: webhook-secret
+            namespace: aap-as-a-service
+          type: Opaque
+          data:
+            secretToken: !vault |
+              $ANSIBLE_VAULT;1.1;AES256
+              34386337393537306131376232316433343732663233646666306334346266383364363062343738
+              6538636330363035616232376434333831343039613035390a646534313732346463626265366434
+              62316430306437346165386433373662323465353933343633633765313234306234343833666661
+              6536303864613236630a336563653135333539613864383765343231323431363336396531386335
+              37643365383630313139623139356237616132343564666633646431306330353232
