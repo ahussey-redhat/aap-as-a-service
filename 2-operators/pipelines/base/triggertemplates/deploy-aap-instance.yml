@@ -26,7 +26,8 @@ spec:
       taskRunSpecs:
         - pipelineTaskName: deploy-aap-instance
           serviceAccountName: deployer
-      serviceAccountName: pipeline
+      taskRunTemplate:
+        serviceAccountName: pipeline
       pipelineRef:
         name: deploy-aap-instance
       params:

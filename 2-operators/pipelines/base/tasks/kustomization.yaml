@@ -5,6 +5,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "3"
 namespace: aap-as-a-service
 resources:
+  - prepare-aap-instance.yml
   - deploy-aap-instance.yml
   - conduct-day2-ops.yml
   - update-servicenow-ticket.yml
