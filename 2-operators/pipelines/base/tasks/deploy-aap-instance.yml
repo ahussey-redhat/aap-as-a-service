@@ -44,7 +44,7 @@ spec:
         - name: HOME
           value: /tekton/home
       image: >-
-        image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+        quay.io/ahussey/tekton-utils:latest
       resources: {}
       script: |
         #!/usr/bin/env bash
@@ -72,7 +72,7 @@ spec:
         # debug
         ls -als
 
-        # Configure AAP application namespace 
+        # Configure AAP application namespace
         #oc kustomize edit set namespace="${BRANCH_NAME}-${TEAM_NAME}"
       securityContext:
         runAsNonRoot: true
@@ -81,7 +81,7 @@ spec:
     # Perform operations that require YQ
     - name: edit-aap-instance-gitops-application
       image: >-
-        registry.redhat.io/devspaces/udi-rhel8:latest
+        quay.io/ahussey/tekton-utils:latest
       resources: {}
       script: |
         #!/usr/bin/env bash
