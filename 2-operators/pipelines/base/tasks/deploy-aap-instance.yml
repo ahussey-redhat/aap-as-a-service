@@ -76,6 +76,8 @@ spec:
 
         # Configure AAP application namespace
         #oc kustomize edit set namespace="${BRANCH_NAME}-${TEAM_NAME}"
+
+        exit 0
       securityContext:
         runAsNonRoot: true
         runAsUser: 65532
@@ -116,6 +118,8 @@ spec:
         # Configure AAP instance name
         yq -ei ".metadata.name |= envsubst" aap-instance/base/instance.yml
         yq -ei ".namespace |= envsubst" kustomization.yaml
+
+        exit 0
       securityContext:
         runAsNonRoot: true
         runAsUser: 65532
@@ -151,6 +155,8 @@ spec:
         git commit -m "Add ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} environment"
         git push -u origin main -f
 
+        exit 0
+
     # Create AAP application in ArgoCD
     - name: deploy-aap-instance
       serviceAccountName: deployer
@@ -178,6 +184,8 @@ spec:
         export KUBECONFIG=$(workspaces.kubeconfig-dir.path)/kubeconfig
 
         oc apply -f $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}/application.yml
+
+        exit 0
       securityContext:
         runAsNonRoot: true
         runAsUser: 65532
