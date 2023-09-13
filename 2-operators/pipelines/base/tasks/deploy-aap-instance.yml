@@ -137,12 +137,12 @@ spec:
 
         cd $(workspaces.output.path)
 
-        # Configure SSH keys
-        git config --global core.sshCommand "ssh -vT -i $(workspaces.ssh-directory.path)/id_rsa -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
-
         git config --global --add safe.directory $(workspaces.output.path)
         git config --global user.name "${OWNER}"
         git config --global user.email "${OWNER}@example.com"
+
+        # Configure SSH keys
+        git config core.sshCommand "ssh -vT -i $(workspaces.ssh-directory.path)/id_rsa -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
 
         # debug
         #git remote -v
