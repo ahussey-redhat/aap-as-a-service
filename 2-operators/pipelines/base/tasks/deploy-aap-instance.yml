@@ -135,6 +135,7 @@ spec:
 
         cd $(workspaces.output.path)
 
+        git config --global --add safe.directory $(workspaces.output.path)
         git config --global user.name ${OWNER}
         git config --global user.email ${OWNER}@example.com
         git add --all
