@@ -138,7 +138,7 @@ spec:
         git config --global --add safe.directory $(workspaces.output.path)
         git config --global user.name ${OWNER}
         git config --global user.email ${OWNER}@example.com
-        git checkout main
+        git checkout -b main
         git branch --set-upstream-to=origin/main main
         git add --all
         git commit -m "Add ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} environment"
