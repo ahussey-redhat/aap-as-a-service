@@ -138,6 +138,8 @@ spec:
         git config --global --add safe.directory $(workspaces.output.path)
         git config --global user.name ${OWNER}
         git config --global user.email ${OWNER}@example.com
+
+        git fetch --all
         git checkout -b main
         git branch --set-upstream-to=origin/main main
         git add --all
