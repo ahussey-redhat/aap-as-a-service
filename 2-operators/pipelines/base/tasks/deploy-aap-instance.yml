@@ -133,7 +133,7 @@ spec:
         cd $(workspaces.output.path)
 
         # Configure SSH keys
-        git config --global core.sshCommand "ssh -i $(workspaces.ssh-directory.path)/id_rsa -o IdentitiesOnly=yes"
+        git config --global core.sshCommand "ssh -vT -i $(workspaces.ssh-directory.path)/id_rsa -o IdentitiesOnly=yes"
 
         git config --global --add safe.directory $(workspaces.output.path)
         git config --global user.name ${OWNER}
