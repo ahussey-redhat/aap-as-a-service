@@ -1,0 +1,177 @@
+# WIP
+# This should:
+# 1. Deploy an AAP instance, specific to the ServiceNow incident that was raised
+# 2. Be managed utilizing GitOps
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  annotations:
+    tekton.dev/displayName: Prepare to deploy an AAP instance
+    tekton.dev/pipelines.minVersion: 0.17.0
+    tekton.dev/tags: aap
+  name: prepare-app-instance
+  labels:
+    app.kubernetes.io/version: '0.1'
+    operator.tekton.dev/operand-name: openshift-pipelines-addons
+    operator.tekton.dev/provider-type: ahussey
+spec:
+  description: >-
+    This task runs all the commands required to prepare to deploy an AAP instance.
+  params:
+    - default: "20"
+      description: The max number of managed nodes
+      name: maxHosts
+      type: string
+    - description: Branch name
+      name: branchName
+      type: string
+    - description: Team name
+      name: teamName
+      type: string
+    - description: AAP instance owner
+      name: owner
+      type: string
+    - description: ServiceNow incident ID
+      name: serviceNowIncidentID
+      type: string
+    - description: AAP instance number
+      name: instanceID
+      type: string
+  steps:
+    # Create environment, and update appropriate variables for the AAP instance
+    - name: kustomize-aap-instance-gitops
+      env:
+        - name: HOME
+          value: /tekton/home
+      image: >-
+        quay.io/ahussey/tekton-utils:latest
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+        set -euxo pipefail
+
+        export BRANCH_NAME=$(params.branchName)
+        export TEAM_NAME=$(params.teamName)
+        export INSTANCE_ID=$(params.instanceID)
+        export OWNER=$(params.owner)
+        export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
+
+        [[ "$(workspaces.manifest-dir.bound)" == "true" ]] && \
+        cd $(workspaces.manifest-dir.path)
+
+        [[ "$(workspaces.kubeconfig-dir.bound)" == "true" ]] && \
+        [[ -f $(workspaces.kubeconfig-dir.path)/kubeconfig ]] && \
+        export KUBECONFIG=$(workspaces.kubeconfig-dir.path)/kubeconfig
+
+        if [[ -d environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} ]]; then
+          echo "AAP instance for ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} already exists."
+          exit 1
+        fi
+
+        if [[ ! -d environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} ]]; then
+          cp -r $(workspaces.output.path)/environments/template $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
+        fi
+
+        cd $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
+
+        # Configure AAP application namespace
+        #oc kustomize edit set namespace="${BRANCH_NAME}-${TEAM_NAME}"
+
+        exit 0
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+
+    # Perform operations that require YQ
+    - name: edit-aap-instance-gitops-application
+      image: >-
+        quay.io/ahussey/tekton-utils:latest
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+        set -euxo pipefail
+
+        export BRANCH_NAME=$(params.branchName)
+        export TEAM_NAME=$(params.teamName)
+        export INSTANCE_ID=$(params.instanceID)
+        export OWNER=$(params.owner)
+        export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
+
+        cd $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
+
+        # Configure AAP ArgoCD application name
+        yq -ei ".metadata.name |= envsubst" application.yml
+
+        # Configure AAP ArgoCD application namespace
+        yq -ei ".metadata.namespace |= envsubst" application.yml
+
+        # Configure destination namespace
+        yq -ei ".spec.destination.namespace |= envsubst" application.yml
+
+        # Configure environment path
+        yq -ei ".spec.source.path |= envsubst" application.yml
+
+        # Configure ArgoCD application labels
+        yq -ei ".metadata.labels.servicenowincidentid |= envsubst" application.yml
+        yq -ei ".metadata.labels.owner |= envsubst" application.yml
+
+        # Configure AAP instance name
+        yq -ei ".metadata.name |= envsubst" aap-instance/base/instance.yml
+        yq -ei ".namespace |= envsubst" kustomization.yaml
+
+        exit 0
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+
+    # Push changes to ArgoCD repo
+    - name: git-push
+      image: >-
+        registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:1a50511583fc02a27012d17d942e247813404104ddd282d7e26f99765174392c
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+        set -euxo pipefail
+
+        export BRANCH_NAME=$(params.branchName)
+        export TEAM_NAME=$(params.teamName)
+        export INSTANCE_ID=$(params.instanceID)
+        export OWNER=$(params.owner)
+        export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
+
+        cd $(workspaces.output.path)
+
+        git config --global --add safe.directory $(workspaces.output.path)
+        git config --global user.name "${OWNER}"
+        git config --global user.email "${OWNER}@example.com"
+
+        # Configure SSH keys
+        git config core.sshCommand "ssh -v-i $(workspaces.ssh-directory.path)/id_rsa -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
+
+        git fetch --all
+        git checkout -b main
+        git branch --set-upstream-to=origin/main main
+        git add --all
+        git commit -m "Add ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} environment"
+        git push -u origin main -f
+
+        exit 0
+
+  # Workspace definitions
+  workspaces:
+    - description: >-
+        The workspace which contains kubernetes manifests which we want to apply
+        on the cluster.
+      name: manifest-dir
+      optional: true
+    - description: >-
+        The workspace which contains the the kubeconfig file if in case we want
+        to run the oc command on another cluster.
+      name: kubeconfig-dir
+      optional: true
+    - description: >-
+        The workspace which contains the SSH configuration and certificates.
+      name: ssh-directory
+    - description: >-
+        The workspace which contains the ArgoCD cloned git repository
+      name: output
