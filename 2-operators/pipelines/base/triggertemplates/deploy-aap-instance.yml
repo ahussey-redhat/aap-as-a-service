@@ -18,7 +18,7 @@ spec:
   - name: instanceID
     description: Iterative number associated with this AAP instance
   resourcetemplates:
-  - apiVersion: tekton.dev/v1beta1
+  - apiVersion: tekton.dev/v1
     kind: PipelineRun
     metadata:
       generateName: deploy-aap-instance-$(tt.params.branchName)-$(tt.params.teamName)-$(tt.params.instanceID)-
