@@ -123,7 +123,7 @@ spec:
     # Push changes to ArgoCD repo
     - name: git-push
       image: >-
-        registry.redhat.io/devspaces/udi-rhel8:latest
+        registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:1a50511583fc02a27012d17d942e247813404104ddd282d7e26f99765174392c
       resources: {}
       script: |
         #!/usr/bin/env bash
