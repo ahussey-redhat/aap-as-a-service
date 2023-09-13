@@ -145,8 +145,8 @@ spec:
         git config --global user.email "${OWNER}@example.com"
 
         # debug
-        git remote -v
-        ssh -vT -i $(workspaces.ssh-directory.path)/id_rsa -o IdentitiesOnly=yes git@github.com
+        #git remote -v
+        #ssh -vT -i $(workspaces.ssh-directory.path)/id_rsa -o IdentitiesOnly=yes git@github.com
 
         git fetch --all
         git checkout -b main
