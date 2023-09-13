@@ -141,13 +141,13 @@ spec:
         git config --global core.sshCommand "ssh -vT -i $(workspaces.ssh-directory.path)/id_rsa -o IdentitiesOnly=yes"
 
         git config --global --add safe.directory $(workspaces.output.path)
-        git config --global user.name ${OWNER}
-        git config --global user.email ${OWNER}@example.com
+        git config --global user.name "${OWNER}"
+        git config --global user.email "${OWNER}@example.com"
 
         # debug
         git remote -v
 
-        git fetch
+        git fetch --all
         git checkout -b main
         git branch --set-upstream-to=origin/main main
         git add --all
