@@ -20,9 +20,9 @@ spec:
                 - key: serviceNowIncidentID
                   expression: "body.serviceNowIncidentID"
                 - key: branchName
-                  expression: "body.branchName"
+                  expression: "body.branchName.lowerAscii()"
                 - key: teamName
-                  expression: "body.teamName"
+                  expression: "body.teamName.lowerAscii()"
                 - key: maxHosts
                   expression: "body.maxHosts"
                 - key: instanceID
