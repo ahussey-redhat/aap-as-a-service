@@ -9,7 +9,7 @@ metadata:
     tekton.dev/displayName: Prepare to deploy an AAP instance
     tekton.dev/pipelines.minVersion: 0.17.0
     tekton.dev/tags: aap
-  name: prepare-app-instance
+  name: prepare-aap-instance
   labels:
     app.kubernetes.io/version: '0.1'
     operator.tekton.dev/operand-name: openshift-pipelines-addons
