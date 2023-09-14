@@ -217,3 +217,7 @@ spec:
           value: "$(params.teamName)"
         - name: instanceID
           value: "$(params.instanceID)"
+      when:
+        - input: $(tasks.status)
+          operator: in
+          values: ["Failed"]
