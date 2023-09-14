@@ -177,12 +177,14 @@ spec:
           value: "$(params.teamName)"
         - name: instanceID
           value: "$(params.instanceID)"
+        - name: isAlreadyDefined
+          value: "$(tasks.prepare-aap-instance.results.instance-already-defined)"
         - name: adminPassword
           value: "$(tasks.deploy-aap-instance.results.admin-password)"
       runAfter:
         - update-servicenow-ticket-deployed
       workspaces:
-        - name: argocd-dir
+        - name: output
           workspace: working-directory
     - name: update-servicenow-ticket-complete
       taskRef:

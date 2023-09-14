@@ -36,35 +36,34 @@ spec:
     - description: ServiceNow incident ID
       name: serviceNowIncidentID
       type: string
+    - description: AAP instance number
+      name: instanceID
+      type: string
+    - default: "false"
+      description: Is this AAP instance already defined?
+      name: instanceAlreadyDefined
+      type: string
     - default: password
       description: Admin password for this AAP instance
       name: adminPassword
       type: string
   steps:
     # Update appropriate variables for the AAP instance
-    - name: kustomize-aap-instance
+    - name: customise-aap-instance
       image: >-
         registry.redhat.io/devspaces/udi-rhel8:latest
       resources: {}
       script: |
         #!/usr/bin/env bash
+        set -euxo pipefail
 
-        cd $(workspaces.output.path)/environments/${branchName}-${teamName}-${instanceNumber}
+        export BRANCH_NAME=$(params.branchName)
+        export TEAM_NAME=$(params.teamName)
+        export INSTANCE_ID=$(params.instanceID)
+        export OWNER=$(params.owner)
+        export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
 
-        # # Configure AAP ArgoCD application name
-        # kustomize edit set metadata.name=${branchName}-${teamName}-${instanceNumber} environments/${branchName}-${teamName}/${instanceNumber}/application.yml
-        # # Configure AAP ArgoCD application namespace
-        # kustomize edit set metadata.namespace=${branchName}-${teamName} environments/${branchName}-${teamName}/${instanceNumber}/application.yml
-
-        # # Configure AAP application namespace
-        # kustomize edit set namespace=${branchName}-${teamName} environments/${branchName}-${teamName}/${instanceNumber}/kustomization.yaml
-
-        # # Configure ArgoCD application labels
-        # kustomize edit set metadata.labels.servicenowincidentid=${serviceNowIncidentID} environments/${branchName}-${teamName}/${instanceNumber}/application.yml
-        # kustomize edit set metadata.labels.owner=${owner} environments/${branchName}-${teamName}/${instanceNumber}/application.yml
-
-        # # Configure AAP instance name
-        # yq -ei '.metadata.name = "${branchName}-${teamName}-${instanceNumber}"' environments/${branchName}-${teamName}/${instanceNumber}/aap-instance/base/instance.yml
+        cd $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
 
         # Upload manifest - https://access.redhat.com/solutions/5948011
         # curl -k -u "admin:$(params.adminPassword)" https://${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE-ID}-controller.apps.
@@ -84,4 +83,4 @@ spec:
       optional: true
     - description: >-
         The workspace which contains the ArgoCD cloned git repository
-      name: argocd-dir
+      name: output
