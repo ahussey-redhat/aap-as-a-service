@@ -101,8 +101,6 @@ spec:
       workspaces:
         - name: output
           workspace: working-directory
-        - name: ssh-directory
-          workspace: ssh-creds
     - name: customise-aap-instance
       taskRef:
         name: customise-aap-instance
