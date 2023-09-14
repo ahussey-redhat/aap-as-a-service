@@ -4,6 +4,7 @@ resources:
   - operatorgroup.yml
   - subscription.yml
   - namespace.yml
+  - rolebinding.yml
   - ./eventlisteners
   - ./triggertemplates
   - ./pipelines
