@@ -124,8 +124,9 @@ spec:
         yq -ei ".spec.targetNamespaces.[0] |= envsubst" aap-instance/base/operatorgroup.yml
         yq -ei ".metadata.namespace |= envsubst" aap-instance/base/subscription.yml
 
-        # Configure AAP instance name
+        # Configure AAP instance
         yq -ei ".metadata.name |= envsubst" aap-instance/base/instance.yml
+        yq -ei ".spec.route_host |= envsubst" aap-instance/base/instance.yml
 
         yq -ei ".namespace |= envsubst" kustomization.yaml
 

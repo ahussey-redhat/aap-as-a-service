@@ -1,4 +1,5 @@
 # TODO
+- [ ] App of Apps - for automated cleanup
 - [ ] Configure Day0 ops
   - [ ] Deploy AAP instance using TekTon + ArgoCD
     - [ ] Use [aap-as-a-service-gitops](https://github.com/ahussey-redhat/aap-as-a-service-gitops/tree/main) repo
