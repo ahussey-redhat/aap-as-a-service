@@ -119,8 +119,14 @@ spec:
         yq -ei ".metadata.labels.servicenowincidentid |= envsubst" application.yml
         yq -ei ".metadata.labels.owner |= envsubst" application.yml
 
+        # Configure AAP Operator
+        yq -ei ".metadata.namespace |= envsubst" aap-instance/base/operatorgroup.yml
+        yq -ei ".spec.targetNamespaces.[0] |= envsubst" aap-instance/base/operatorgroup.yml
+        yq -ei ".metadata.namespace |= envsubst" aap-instance/base/subscription.yml
+
         # Configure AAP instance name
         yq -ei ".metadata.name |= envsubst" aap-instance/base/instance.yml
+
         yq -ei ".namespace |= envsubst" kustomization.yaml
 
         exit 0
