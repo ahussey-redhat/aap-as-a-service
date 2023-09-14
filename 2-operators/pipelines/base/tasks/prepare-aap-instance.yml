@@ -63,17 +63,20 @@ spec:
         [[ -f $(workspaces.kubeconfig-dir.path)/kubeconfig ]] && \
         export KUBECONFIG=$(workspaces.kubeconfig-dir.path)/kubeconfig
 
-        # if [[ -d environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} ]]; then
+        # if [[ -d $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} ]]; then
         #   echo "AAP instance for ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} already exists."
         #   # publish result that says instance already exists
         #   exit 0
         # fi
 
-        if [[ ! -d environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} ]]; then
-          cp -r $(workspaces.output.path)/environments/template $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
+        if [[ ! -d $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} ]]; then
+          cp -r $(workspaces.output.path)/environments/template/* $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}/
         fi
 
         cd $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
+
+        # Cleanup bad copy
+        rm -rf template
 
         # Configure AAP application namespace
         #oc kustomize edit set namespace="${BRANCH_NAME}-${TEAM_NAME}"
