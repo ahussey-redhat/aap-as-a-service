@@ -54,7 +54,7 @@ spec:
 
         # # Configure AAP application namespace
         # kustomize edit set namespace=${branchName}-${teamName} environments/${branchName}-${teamName}/${instanceNumber}/kustomization.yaml
-        
+
         # # Configure ArgoCD application labels
         # kustomize edit set metadata.labels.servicenowincidentid=${serviceNowIncidentID} environments/${branchName}-${teamName}/${instanceNumber}/application.yml
         # kustomize edit set metadata.labels.owner=${owner} environments/${branchName}-${teamName}/${instanceNumber}/application.yml
@@ -62,19 +62,10 @@ spec:
         # # Configure AAP instance name
         # yq -ei '.metadata.name = "${branchName}-${teamName}-${instanceNumber}"' environments/${branchName}-${teamName}/${instanceNumber}/aap-instance/base/instance.yml
 
-    # Push changes to ArgoCD repo
-    - name: git-push
-      image: >-
-        registry.redhat.io/devspaces/udi-rhel8:latest
-      resources: {}
-      script: |
-        #!/usr/bin/env bash
-      
-        git config --global user.name $(params.owner)
-        git config --global user.email $(params.owner)@example.com
-        git add --all
-        git commit -m "Add ${branchOrTeamName}-${instanceNumber} environment"
-        git push -u origin main -f
+        # Upload manifest - https://access.redhat.com/solutions/5948011
+
+        exit 0
+
 
   # Workspace definitions
   workspaces:

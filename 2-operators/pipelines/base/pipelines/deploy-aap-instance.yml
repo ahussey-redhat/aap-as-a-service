@@ -156,6 +156,9 @@ spec:
           value: "$(params.instanceID)"
       runAfter:
         - update-servicenow-ticket-deployed
+      workspaces:
+        - name: argocd-dir
+          workspace: working-directory
     - name: update-servicenow-ticket-complete
       taskRef:
         name: update-servicenow-ticket
