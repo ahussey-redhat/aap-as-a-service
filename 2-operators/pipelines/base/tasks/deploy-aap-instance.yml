@@ -37,6 +37,9 @@ spec:
     - description: AAP instance number
       name: instanceID
       type: string
+    - description: Is this AAP instance already defined?
+      name: instanceAlreadyDefined
+      type: string
   steps:
     # Create AAP application in ArgoCD
     - name: deploy-aap-instance
@@ -51,7 +54,9 @@ spec:
         set -euxo pipefail
 
         # Add logic to allow force deployment
-        if [[ $(tasks.prepare-aap-instance.results.instance-already-defined) ]]; then
+        export INSTANCE_ALREADY_DEFINED=$(params.instanceAlreadyDefined)
+
+        if [[ ${INSTANCE_ALREADY_DEFINED} ]]; then
           echo "AAP instance already defined. Skipping step."
           exit 0
         fi
