@@ -157,7 +157,7 @@ spec:
         git branch --set-upstream-to=origin/main main
         git add --all
         git commit -m "Add ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} environment"
-        git push -u origin main -f || true # always exit 0 for debugging
+        git push -u origin main -f
 
         exit 0
 
