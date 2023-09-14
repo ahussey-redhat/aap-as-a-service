@@ -45,7 +45,7 @@ spec:
       script: |
         #!/usr/bin/env bash
 
-        cd environments/${branchName}-${teamName}-${instanceNumber}
+        cd $(workspaces.output.path)/environments/${branchName}-${teamName}-${instanceNumber}
 
         # # Configure AAP ArgoCD application name
         # kustomize edit set metadata.name=${branchName}-${teamName}-${instanceNumber} environments/${branchName}-${teamName}/${instanceNumber}/application.yml
