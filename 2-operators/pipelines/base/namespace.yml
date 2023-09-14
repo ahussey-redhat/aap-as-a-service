@@ -6,4 +6,5 @@ metadata:
     argocd.argoproj.io/sync-wave: "0"
     openshift.io/description: "Ansible Automation Platform as a Service"
     openshift.io/display-name: "AAPaaS"
+    argocd.argoproj.io/managed-by: "openshift-gitops"
   name: aap-as-a-service
