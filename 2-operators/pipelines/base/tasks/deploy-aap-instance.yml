@@ -37,7 +37,8 @@ spec:
     - description: AAP instance number
       name: instanceID
       type: string
-    - description: Is this AAP instance already defined?
+    - default: "false"
+      description: Is this AAP instance already defined?
       name: instanceAlreadyDefined
       type: string
   steps:
