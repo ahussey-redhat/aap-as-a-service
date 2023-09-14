@@ -177,6 +177,8 @@ spec:
           value: "$(params.teamName)"
         - name: instanceID
           value: "$(params.instanceID)"
+        - name: adminPassword
+          value: "$(tasks.deploy-aap-instance.results.admin-password)"
       runAfter:
         - update-servicenow-ticket-deployed
       workspaces:

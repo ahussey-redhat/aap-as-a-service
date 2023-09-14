@@ -41,6 +41,9 @@ spec:
       description: Is this AAP instance already defined?
       name: instanceAlreadyDefined
       type: string
+  results:
+    - name: admin-password
+      description: The admin password for this AAP instance
   steps:
     # Create AAP application in ArgoCD
     - name: deploy-aap-instance
@@ -76,6 +79,10 @@ spec:
         export KUBECONFIG=$(workspaces.kubeconfig-dir.path)/kubeconfig
 
         oc apply -f $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}/application.yml
+
+        echo "Waiting 60 seconds for initial admin password to be created"
+        sleep 60
+        oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.admin-password.path)
 
         exit 0
       securityContext:

@@ -36,6 +36,10 @@ spec:
     - description: ServiceNow incident ID
       name: serviceNowIncidentID
       type: string
+    - default: password
+      description: Admin password for this AAP instance
+      name: adminPassword
+      type: string
   steps:
     # Update appropriate variables for the AAP instance
     - name: kustomize-aap-instance
@@ -63,7 +67,7 @@ spec:
         # yq -ei '.metadata.name = "${branchName}-${teamName}-${instanceNumber}"' environments/${branchName}-${teamName}/${instanceNumber}/aap-instance/base/instance.yml
 
         # Upload manifest - https://access.redhat.com/solutions/5948011
-
+        # curl -k -u "admin:$(params.adminPassword)" https://${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE-ID}-controller.apps.
         exit 0
 
 
