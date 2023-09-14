@@ -50,6 +50,12 @@ spec:
         #!/usr/bin/env bash
         set -euxo pipefail
 
+        # Add logic to allow force deployment
+        if [[ $(tasks.prepare-aap-instance.results.instance-already-defined) ]]; then
+          echo "AAP instance already defined. Skipping step."
+          exit 0
+        fi
+
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
         export INSTANCE_ID=$(params.instanceID)

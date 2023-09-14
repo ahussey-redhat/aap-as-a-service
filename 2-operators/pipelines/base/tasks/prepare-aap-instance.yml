@@ -37,6 +37,9 @@ spec:
     - description: AAP instance number
       name: instanceID
       type: string
+  results:
+    - name: instance-already-defined
+      description: Whether the instance already is defined
   steps:
     # Create environment, and update appropriate variables for the AAP instance
     - name: kustomize-aap-instance-gitops
@@ -63,11 +66,12 @@ spec:
         [[ -f $(workspaces.kubeconfig-dir.path)/kubeconfig ]] && \
         export KUBECONFIG=$(workspaces.kubeconfig-dir.path)/kubeconfig
 
-        # if [[ -d $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} ]]; then
-        #   echo "AAP instance for ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} already exists."
-        #   # publish result that says instance already exists
-        #   exit 0
-        # fi
+        if [[ -d $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} ]]; then
+          echo "AAP instance for ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} already defined. Skipping step."
+          # publish result that says instance already defined
+          echo 'true' | tee $(results.instance-already-defined.path)
+          exit 0
+        fi
 
         if [[ ! -d $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} ]]; then
           cp -r $(workspaces.output.path)/environments/template $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
@@ -94,6 +98,11 @@ spec:
       script: |
         #!/usr/bin/env bash
         set -euxo pipefail
+
+        if [[ $(tasks.prepare-aap-instance.results.instance-already-defined) ]]; then
+          echo "AAP instance already defined. Skipping step."
+          exit 0
+        fi
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
@@ -143,6 +152,11 @@ spec:
       script: |
         #!/usr/bin/env bash
         set -euxo pipefail
+
+        if [[ $(tasks.prepare-aap-instance.results.instance-already-defined) ]]; then
+          echo "AAP instance already defined. Skipping step."
+          exit 0
+        fi
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
