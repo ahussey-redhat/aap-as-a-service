@@ -90,6 +90,7 @@ spec:
         # Configure AAP instance
         yq -ei ".metadata.name |= envsubst" aap-instance/base/instance.yml
         yq -ei ".spec.route_host |= envsubst" aap-instance/base/instance.yml
+        yq -ei ".metadata.namespace |= envsubst" aap-instance/base/rolebinding.yml
 
         yq -ei ".namespace |= envsubst" kustomization.yaml
 
