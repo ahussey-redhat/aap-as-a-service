@@ -15,3 +15,20 @@ data:
   type: Z2l0
   url: aHR0cHM6Ly9naXRodWIuY29tL2FodXNzZXktcmVkaGF0L2FhcC1hcy1hLXNlcnZpY2UuZ2l0
 type: Opaque
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: aap-as-a-service-gitops-repo
+  namespace: openshift-gitops
+  labels:
+    argocd.argoproj.io/secret-type: repository
+  annotations:
+    managed-by: argocd.argoproj.io
+data:
+  insecure: ZmFsc2U=
+  name: YWFwLWFzLWEtc2VydmljZS1naXRvcHM=
+  project: ZGVmYXVsdA==
+  type: Z2l0
+  url: aHR0cHM6Ly9naXRodWIuY29tL2FodXNzZXktcmVkaGF0L2FhcC1hcy1hLXNlcnZpY2UtZ2l0b3BzLmdpdA==
+type: Opaque
