@@ -70,7 +70,6 @@ spec:
         # curl -k -u "admin:$(params.adminPassword)" https://${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE-ID}-controller.apps.
         exit 0
 
-
   # Workspace definitions
   workspaces:
     - description: >-

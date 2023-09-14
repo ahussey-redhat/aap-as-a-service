@@ -62,6 +62,8 @@ spec:
 
         if [[ ${INSTANCE_ALREADY_DEFINED} ]]; then
           echo "AAP instance already defined. Skipping step."
+          # We still want to retrieve the admin password
+          oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.admin-password.path)
           exit 0
         fi
 
