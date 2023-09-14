@@ -57,6 +57,12 @@ spec:
         #!/usr/bin/env bash
         set -euxo pipefail
 
+        export BRANCH_NAME=$(params.branchName)
+        export TEAM_NAME=$(params.teamName)
+        export INSTANCE_ID=$(params.instanceID)
+        export OWNER=$(params.owner)
+        export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
+
         # Add logic to allow force deployment
         export INSTANCE_ALREADY_DEFINED=$(params.instanceAlreadyDefined)
 
@@ -66,12 +72,6 @@ spec:
           oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.admin-password.path)
           exit 0
         fi
-
-        export BRANCH_NAME=$(params.branchName)
-        export TEAM_NAME=$(params.teamName)
-        export INSTANCE_ID=$(params.instanceID)
-        export OWNER=$(params.owner)
-        export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
 
         [[ "$(workspaces.manifest-dir.bound)" == "true" ]] && \
         cd $(workspaces.manifest-dir.path)
