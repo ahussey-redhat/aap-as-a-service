@@ -75,7 +75,7 @@ spec:
         https://${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller.apps.k8s.sandbox1017.opentlc.com/api/v2/config/
 
         exit 0
-    - name: modify-default-organization-maxhosts
+    - name: modify-default-organization
       image: >-
         registry.redhat.io/devspaces/udi-rhel8:latest
       resources: {}
@@ -91,7 +91,7 @@ spec:
         export MAX_HOSTS=$(params.maxHosts)
 
         cd $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
-
+        echo "Setting maxHosts: ${MAX_HOSTS}"
         # Update maxHosts for Default organization
         curl -vk \
         -u "admin:$(params.adminPassword)" \
@@ -104,7 +104,58 @@ spec:
         https://${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller.apps.k8s.sandbox1017.opentlc.com/api/v2/organizations/1/
 
         exit 0
+    - name: configure-sso
+      image: >-
+        registry.redhat.io/devspaces/udi-rhel8:latest
+      resources: {}
+      env:
+        - name: SSO_OIDC_KEY
+          valueFrom:
+            secretKeyRef:
+              name: oidc
+              key: key
+        - name: SSO_OIDC_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: oidc
+              key: secret
+        - name: SSO_OIDC_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: oidc
+              key: endpoint
+        - name: SSO_OIDC_VERIFY_SSL
+          valueFrom:
+            secretKeyRef:
+              name: oidc
+              key: verify-ssl
+      script: |
+        #!/usr/bin/env bash
+        set -euxo pipefail
 
+        export BRANCH_NAME=$(params.branchName)
+        export TEAM_NAME=$(params.teamName)
+        export INSTANCE_ID=$(params.instanceID)
+        export OWNER=$(params.owner)
+        export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
+        export MAX_HOSTS=$(params.maxHosts)
+
+        cd $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
+        echo "Configuring SSO"
+        # Configure SSO
+        curl -vk \
+        -u "admin:$(params.adminPassword)" \
+        -X PATCH \
+        -H 'Content-Type:application/json' \
+        -d "{
+          \"SOCIAL_AUTH_OIDC_KEY\": ${SSO_OIDC_KEY},
+          \"SOCIAL_AUTH_OIDC_SECRET\": ${SSO_OIDC_SECRET},
+          \"SOCIAL_AUTH_OIDC_OIDC_ENDPOINT\": ${SSO_OIDC_ENDPOINT},
+          \"SOCIAL_AUTH_OIDC_VERIFY_SSL\": ${SSO_OIDC_VERIFY_SSL},
+        }" \
+        https://${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller.apps.k8s.sandbox1017.opentlc.com/api/v2/settings/oidc/
+
+        exit 0
   # Workspace definitions
   workspaces:
     - description: >-
