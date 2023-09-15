@@ -168,6 +168,8 @@ spec:
       taskRef:
         name: conduct-day1-ops
       params:
+        - name: maxHosts
+          value: "$(params.maxHosts)"
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
         - name: owner

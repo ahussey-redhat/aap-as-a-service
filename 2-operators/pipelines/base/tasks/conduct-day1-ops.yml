@@ -20,8 +20,7 @@ spec:
   description: >-
     This task runs all the commands required to deploy an AAP instance.
   params:
-    - default: "20"
-      description: The max number of managed nodes
+    - description: The max number of managed nodes
       name: maxHosts
       type: string
     - description: Branch name
