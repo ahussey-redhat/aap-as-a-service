@@ -130,7 +130,6 @@ spec:
           \"SOCIAL_AUTH_TEAM_MAP\": {
             \"${TEAM_NAME}\": {
                 \"organization\": \"Default\",
-                \"admins\": false,
                 \"users\": \"/.*[${TEAM_NAME}].*\$/\",
                 \"remove\": true
             }
