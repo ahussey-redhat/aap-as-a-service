@@ -74,7 +74,36 @@ spec:
         -d @manifest_payload.json \
         https://${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller.apps.k8s.sandbox1017.opentlc.com/api/v2/config/
 
-        #exit 0
+        exit 0
+    - name: modify-default-organization-maxhosts
+      image: >-
+        registry.redhat.io/devspaces/udi-rhel8:latest
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+        set -euxo pipefail
+
+        export BRANCH_NAME=$(params.branchName)
+        export TEAM_NAME=$(params.teamName)
+        export INSTANCE_ID=$(params.instanceID)
+        export OWNER=$(params.owner)
+        export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
+        export MAX_HOSTS=$(params.maxHosts)
+
+        cd $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
+
+        # Update maxHosts for Default organization
+        curl -vk \
+        -u "admin:$(params.adminPassword)" \
+        -X POST \
+        -H 'Content-Type:application/json' \
+        -d "{
+          \"name\": \"Default\",
+          \"max_hosts\": '"'${MAX_HOSTS}'"'
+        }" \
+        https://${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller.apps.k8s.sandbox1017.opentlc.com/api/v2/organizations/
+
+        exit 0
 
   # Workspace definitions
   workspaces:

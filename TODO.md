@@ -1,5 +1,5 @@
 # TODO
-- [ ] Configure Day0 ops
+- [X] Configure Day0 ops
   - [X] Deploy AAP instance using TekTon + ArgoCD
     - [X] Use [aap-as-a-service-gitops](https://github.com/ahussey-redhat/aap-as-a-service-gitops/tree/main) repo
   - [X] Include metadata
@@ -9,7 +9,7 @@
   - [X] Configure break-glass/superuser account
     - The `admin` superuser account is created automatically by the AAP Operator
 - [ ] Configure Day1 ops
-  - [ ] Upload manifest
+  - [X] Upload manifest
   - [ ] Create organisation
     - [ ] maxHosts
 - [ ] Configure Day2 ops
@@ -19,3 +19,4 @@
 - [ ] Production-ise
   - [ ] App of Apps - for automated cleanup
   - [ ] Make app ingress FQDN dynamic
+  - [ ] Have `curl` commands exit non-zero if HTTP status not 200
