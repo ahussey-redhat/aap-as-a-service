@@ -96,7 +96,7 @@ spec:
         # Update maxHosts for Default organization
         curl -vk \
         -u "admin:$(params.adminPassword)" \
-        -X PATCH \
+        -X PUT \
         -H 'Content-Type:application/json' \
         -d "{
           \"name\": \"Default\",
