@@ -66,12 +66,13 @@ spec:
         cd $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
 
         # Upload manifest - https://access.redhat.com/solutions/5948011
-        echo "{\"manifest\": \"$(base64 -w0 $(workspaces.aap-manifest.path)/manifest.zip)\"}" > manifest_payload.json
         curl -vk \
         -u "admin:$(params.adminPassword)" \
         -X POST \
         -H 'Content-Type:application/json' \
-        -d @manifest_payload.json \
+        -d "{
+          \"manifest\": \"$(base64 -w0 $(workspaces.aap-manifest.path)/manifest.zip)\"
+        }" \
         https://${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller.apps.k8s.sandbox1017.opentlc.com/api/v2/config/
 
         exit 0
@@ -99,7 +100,7 @@ spec:
         -H 'Content-Type:application/json' \
         -d "{
           \"name\": \"Default\",
-          \"max_hosts\": \"${MAX_HOSTS}\"
+          \"max_hosts\": ${MAX_HOSTS}
         }" \
         https://${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller.apps.k8s.sandbox1017.opentlc.com/api/v2/organizations/
 
