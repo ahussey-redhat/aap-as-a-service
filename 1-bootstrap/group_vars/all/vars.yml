@@ -1,3 +1,3 @@
 sso_oidc_key: servicenow-demo-rh
-sso_oidc_endpoint: https://sso.bastion.blueguardian.co/realms/aap-as-a-service/.well-known/openid-configuration
+sso_oidc_endpoint: https://sso.bastion.blueguardian.co/realms/aap-as-a-service
 sso_oidc_verify_ssl: "true"

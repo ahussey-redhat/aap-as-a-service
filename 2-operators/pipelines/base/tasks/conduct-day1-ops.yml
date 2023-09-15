@@ -104,6 +104,44 @@ spec:
         https://${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller.apps.k8s.sandbox1017.opentlc.com/api/v2/organizations/1/
 
         exit 0
+
+    - name: configure-team
+      image: >-
+        registry.redhat.io/devspaces/udi-rhel8:latest
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+        set -euxo pipefail
+
+        export BRANCH_NAME=$(params.branchName)
+        export TEAM_NAME=$(params.teamName)
+        export INSTANCE_ID=$(params.instanceID)
+        export OWNER=$(params.owner)
+        export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
+
+        cd $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
+        echo "Configuring team mapping"
+        # Configure team mapping
+        curl -vk \
+        -u "admin:$(params.adminPassword)" \
+        -X PUT \
+        -H 'Content-Type:application/json' \
+        -d "{
+          \"SOCIAL_AUTH_TEAM_MAP\": {
+            \"${TEAM_NAME}\": {
+                \"organization\": \"Default\",
+                \"admins\": false,
+                \"users\": [
+                  \"/.*[${TEAM_NAME}].*\$/\"
+                ],
+                \"remove\": true
+            }
+          }
+        }" \
+        https://${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller.apps.k8s.sandbox1017.opentlc.com/api/v2/settings/authentication/
+
+        exit 0
+
     - name: configure-sso
       image: >-
         registry.redhat.io/devspaces/udi-rhel8:latest

@@ -13,9 +13,11 @@
   - [ ] Create organisation
     - [ ] maxHosts
 - [ ] Configure Day2 ops
-  - [ ] external auth
-    - [ ] priviledged users
-    - [ ] allowed users
+  - [X] external auth
+    - [ ] ~~priviledged users~~ [can't map user to team or org using OIDC](https://docs.ansible.com/automation-controller/latest/html/administration/ent_auth.html#generic-oidc-settings)
+    - [ ] ~~allowed users~~ [can't map user to team or org using OIDC](https://docs.ansible.com/automation-controller/latest/html/administration/ent_auth.html#generic-oidc-settings)
+    - [X] permit external authentication using SSO
+
 - [ ] Production-ise
   - [ ] App of Apps - for automated cleanup
   - [ ] Make app ingress FQDN dynamic
