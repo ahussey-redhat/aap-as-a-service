@@ -8,5 +8,5 @@ resources:
   - prepare-aap-instance.yml
   - customise-aap-instance.yml
   - deploy-aap-instance.yml
-  - conduct-day2-ops.yml
+  - conduct-day1-ops.yml
   - update-servicenow-ticket.yml

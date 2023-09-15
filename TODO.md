@@ -1,17 +1,21 @@
 # TODO
-- [ ] App of Apps - for automated cleanup
 - [ ] Configure Day0 ops
-  - [ ] Deploy AAP instance using TekTon + ArgoCD
-    - [ ] Use [aap-as-a-service-gitops](https://github.com/ahussey-redhat/aap-as-a-service-gitops/tree/main) repo
-  - [ ] Include metadata
-    - [ ] Instance requestor
-    - [ ] Instance approver
-    - [ ] ServiceNow transaction ID
-  - [ ] Configure break-glass/superuser account
+  - [X] Deploy AAP instance using TekTon + ArgoCD
+    - [X] Use [aap-as-a-service-gitops](https://github.com/ahussey-redhat/aap-as-a-service-gitops/tree/main) repo
+  - [X] Include metadata
+    - [X] Instance requestor
+    - [X] Instance approver
+    - [X] ServiceNow transaction ID
+  - [X] Configure break-glass/superuser account
+    - The `admin` superuser account is created automatically by the AAP Operator
 - [ ] Configure Day1 ops
+  - [ ] Upload manifest
   - [ ] Create organisation
     - [ ] maxHosts
-    - [ ] external auth
-      - [ ] priviledged users
-      - [ ] allowed users
 - [ ] Configure Day2 ops
+  - [ ] external auth
+    - [ ] priviledged users
+    - [ ] allowed users
+- [ ] Production-ise
+  - [ ] App of Apps - for automated cleanup
+  - [ ] Make app ingress FQDN dynamic

@@ -8,10 +8,10 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   annotations:
-    tekton.dev/displayName: deploy aap instance
+    tekton.dev/displayName: Conduct Day1 Operations
     tekton.dev/pipelines.minVersion: 0.17.0
     tekton.dev/tags: aap
-  name: conduct-day2-ops
+  name: conduct-day1-ops
   labels:
     app.kubernetes.io/version: '0.1'
     operator.tekton.dev/operand-name: openshift-pipelines-addons
@@ -49,7 +49,7 @@ spec:
       type: string
   steps:
     # Update appropriate variables for the AAP instance
-    - name: customise-aap-instance
+    - name: upload-manifest-to-aap
       image: >-
         registry.redhat.io/devspaces/udi-rhel8:latest
       resources: {}
@@ -65,16 +65,14 @@ spec:
 
         cd $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
 
-        # Debug manifest directory
-        ls -als $(workspaces.aap-manifest.path)
-
         # Upload manifest - https://access.redhat.com/solutions/5948011
-        echo "{\"manifest\": \"$(base64 -w0 $(workspaces.aap-manifest.path)/manifest)\"}" | tee manifest_payload.json
-        # curl -vk -u "admin:$(params.adminPassword)" \
-        # -X POST \
-        # -H 'Content-Type:application/json' \
-        # -d @$(workspaces.manifest.path)/manifest_payload.json \
-        # https://${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE-ID}-controller.apps.k8s.sandbox1017.opentlc.com/api/v2/config/
+        echo "{\"manifest\": \"$(base64 -w0 $(workspaces.aap-manifest.path)/manifest)\"}" > manifest_payload.json
+        curl -vk -u "admin:$(params.adminPassword)" \
+        -X POST \
+        -H 'Content-Type:application/json' \
+        -d @$(workspaces.manifest.path)/manifest_payload.json \
+        https://${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE-ID}-controller.apps.k8s.sandbox1017.opentlc.com/api/v2/config/
+
         exit 0
 
   # Workspace definitions

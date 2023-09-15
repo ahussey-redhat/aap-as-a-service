@@ -164,9 +164,9 @@ spec:
           value: "$(params.instanceID)"
       runAfter:
         - deploy-aap-instance
-    - name: conduct-day2-ops
+    - name: conduct-day1-ops
       taskRef:
-        name: conduct-day2-ops
+        name: conduct-day1-ops
       params:
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
@@ -206,7 +206,7 @@ spec:
         - name: instanceID
           value: "$(params.instanceID)"
       runAfter:
-        - conduct-day2-ops
+        - conduct-day1-ops
   finally:
     - name: update-servicenow-ticket-failed
       taskRef:
