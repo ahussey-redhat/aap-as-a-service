@@ -20,3 +20,4 @@
   - [ ] App of Apps - for automated cleanup
   - [ ] Make app ingress FQDN dynamic
   - [ ] Have `curl` commands exit non-zero if HTTP status not 200
+  - [ ] Make steps idempotent
