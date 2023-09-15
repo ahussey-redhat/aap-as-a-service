@@ -47,6 +47,9 @@ spec:
         - name: ssh-creds
           secret:
             secretName: argocd-github-ssh
+        - name: aap-manifest-directory
+          secret:
+            secretName: manifest
         - name: working-directory
           volumeClaimTemplate:
             spec:

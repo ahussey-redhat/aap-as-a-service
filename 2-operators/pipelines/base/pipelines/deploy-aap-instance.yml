@@ -9,6 +9,7 @@ spec:
   workspaces:
     - name: working-directory
     - name: ssh-creds
+    - name: aap-manifest-directory
   params:
     - name: argocd-git-url
       type: string
@@ -186,6 +187,8 @@ spec:
       workspaces:
         - name: output
           workspace: working-directory
+        - name: aap-manifest
+          workspace: aap-manifest-directory
     - name: update-servicenow-ticket-complete
       taskRef:
         name: update-servicenow-ticket
