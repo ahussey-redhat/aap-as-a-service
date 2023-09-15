@@ -124,7 +124,7 @@ spec:
         # Configure team mapping
         curl -vk \
         -u "admin:$(params.adminPassword)" \
-        -X PUT \
+        -X PATCH \
         -H 'Content-Type:application/json' \
         -d "{
           \"SOCIAL_AUTH_TEAM_MAP\": {
