@@ -67,7 +67,7 @@ spec:
 
         # Upload manifest - https://access.redhat.com/solutions/5948011
         echo "{\"manifest\": \"$(cat $(workspaces.aap-manifest.path)/manifest)\"}" > manifest_payload.json
-        curl --fail-with-body -vk \
+        curl -vk \
         -u "admin:$(params.adminPassword)" \
         -X POST \
         -H 'Content-Type:application/json' \
