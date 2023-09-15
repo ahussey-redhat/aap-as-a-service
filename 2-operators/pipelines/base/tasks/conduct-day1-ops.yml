@@ -151,7 +151,7 @@ spec:
           \"SOCIAL_AUTH_OIDC_KEY\": \"${SSO_OIDC_KEY}\",
           \"SOCIAL_AUTH_OIDC_SECRET\": \"${SSO_OIDC_SECRET}\",
           \"SOCIAL_AUTH_OIDC_OIDC_ENDPOINT\": \"${SSO_OIDC_ENDPOINT}\",
-          \"SOCIAL_AUTH_OIDC_VERIFY_SSL\": ${SSO_OIDC_VERIFY_SSL},
+          \"SOCIAL_AUTH_OIDC_VERIFY_SSL\": ${SSO_OIDC_VERIFY_SSL}
         }" \
         https://${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller.apps.k8s.sandbox1017.opentlc.com/api/v2/settings/oidc/
 
