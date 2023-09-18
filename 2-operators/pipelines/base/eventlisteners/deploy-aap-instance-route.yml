@@ -8,6 +8,8 @@ metadata:
     app.kubernetes.io/managed-by: EventListener
     app.kubernetes.io/part-of: Triggers
     eventlistener: aap-deploy-instance
+  annotations:
+    cert-manager.io/issuer-name: letsencrypt-sandbox
 spec:
   subdomain: deploy-aap
   to:
