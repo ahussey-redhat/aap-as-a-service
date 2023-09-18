@@ -96,7 +96,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "3"
   labels:
     app.kubernetes.io/name: cert-manager-openshift-routes
-    app.kubernetes.io/version: "$RELEASED_VERSION"
+    app.kubernetes.io/version: "0.2.0"
     app.kubernetes.io/component: controller
     app.kubernetes.io/part-of: cert-manager
 spec:
@@ -104,14 +104,14 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: cert-manager-openshift-routes
-      app.kubernetes.io/version: "$RELEASED_VERSION"
+      app.kubernetes.io/version: "0.2.0"
       app.kubernetes.io/component: controller
       app.kubernetes.io/part-of: cert-manager
   template:
     metadata:
       labels:
         app.kubernetes.io/name: cert-manager-openshift-routes
-        app.kubernetes.io/version: "$RELEASED_VERSION"
+        app.kubernetes.io/version: "0.2.0"
         app.kubernetes.io/component: controller
         app.kubernetes.io/part-of: cert-manager
     spec:
@@ -119,7 +119,7 @@ spec:
       automountServiceAccountToken: true
       containers:
         - name: cert-manager-openshift-routes
-          image: "ghcr.io/cert-manager/cert-manager-openshift-routes:$RELEASED_VERSION"
+          image: "ghcr.io/cert-manager/cert-manager-openshift-routes:0.2.0"
           args:
           - -v=5
           ports:
