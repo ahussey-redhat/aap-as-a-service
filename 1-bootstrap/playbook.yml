@@ -35,6 +35,18 @@
       kubernetes.core.k8s:
         template: "argocd/application.yml"
 
+    # This namespace is later managed by GitOps, but is required for the initial bootstrapping to complete
+    - name: configure AAPaaS project
+      kubernetes.core.k8s:
+        resource_definition:
+          kind: Project
+          apiVersion: project.openshift.io/v1
+          metadata:
+            name: aap-as-a-service
+            labels:
+              kubernetes.io/metadata.name: aap-as-a-service
+      failed_when: false
+
     - name: configure SSH secret
       kubernetes.core.k8s:
         resource_definition:
