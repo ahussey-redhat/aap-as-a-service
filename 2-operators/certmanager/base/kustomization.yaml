@@ -6,3 +6,4 @@ resources:
   - operatorgroup.yml
   - subscription.yml
   - instance.yml
+  - openshift-routes.yml
