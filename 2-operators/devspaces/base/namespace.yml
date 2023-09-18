@@ -6,4 +6,6 @@ metadata:
     argocd.argoproj.io/sync-wave: "0"
     openshift.io/description: "Red Hat OpenShift Dev Spaces Project"
     openshift.io/display-name: "Red Hat OpenShift Dev Spaces"
+  labels:
+    openshift.io/cluster-monitoring: "true"
   name: openshift-devspaces

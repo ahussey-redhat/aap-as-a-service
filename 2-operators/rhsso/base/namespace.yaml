@@ -6,4 +6,6 @@ metadata:
     argocd.argoproj.io/sync-wave: "0"
     openshift.io/description: "SSO project"
     openshift.io/display-name: "Red Hat SSO"
+  labels:
+    openshift.io/cluster-monitoring: "true"
   name: sso
