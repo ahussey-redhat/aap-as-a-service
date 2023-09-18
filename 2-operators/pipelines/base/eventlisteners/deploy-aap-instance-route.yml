@@ -10,6 +10,7 @@ metadata:
     eventlistener: aap-deploy-instance
   annotations:
     cert-manager.io/issuer-name: letsencrypt-sandbox
+    cert-manager.io/issuer-kind: ClusterIssuer
 spec:
   subdomain: deploy-aap
   to:
