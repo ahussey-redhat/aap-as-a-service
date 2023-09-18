@@ -109,3 +109,16 @@
             secret: "{{ sso_oidc_secret | b64encode }}"
             endpoint: "{{ sso_oidc_endpoint | b64encode }}"
             verify-ssl: "{{ sso_oidc_verify_ssl | b64encode }}"
+
+    - name: configure cert-manager route53 secret
+      kubernetes.core.k8s:
+        resource_definition:
+          kind: Secret
+          apiVersion: v1
+          metadata:
+            name: route53-credentials-secret
+            namespace: cert-manager-operator
+          data:
+            access-key-id: "{{ access_key_id | b64encode}}"
+            secret-access-key: "{{ secret_access_key | b64encode }}"
+          type: Opaque
