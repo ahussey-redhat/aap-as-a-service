@@ -62,7 +62,7 @@ spec:
 
         export INSTANCE_ALREADY_DEFINED=$(params.instanceAlreadyDefined)
 
-        if [[ ${INSTANCE_ALREADY_DEFINED} ]]; then
+        if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
           echo "AAP instance already defined. Skipping step."
           exit 0
         fi
@@ -97,7 +97,7 @@ spec:
 
         export INSTANCE_ALREADY_DEFINED=$(params.instanceAlreadyDefined)
 
-        if [[ ${INSTANCE_ALREADY_DEFINED} ]]; then
+        if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
           echo "AAP instance already defined. Skipping step."
           exit 0
         fi
@@ -135,7 +135,7 @@ spec:
 
         export INSTANCE_ALREADY_DEFINED=$(params.instanceAlreadyDefined)
 
-        if [[ ${INSTANCE_ALREADY_DEFINED} ]]; then
+        if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
           echo "AAP instance already defined. Skipping step."
           exit 0
         fi
@@ -198,7 +198,7 @@ spec:
 
         export INSTANCE_ALREADY_DEFINED=$(params.instanceAlreadyDefined)
 
-        if [[ ${INSTANCE_ALREADY_DEFINED} ]]; then
+        if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
           echo "AAP instance already defined. Skipping step."
           exit 0
         fi

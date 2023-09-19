@@ -66,7 +66,7 @@ spec:
         # Add logic to allow force deployment
         export INSTANCE_ALREADY_DEFINED=$(params.instanceAlreadyDefined)
 
-        if [[ ${INSTANCE_ALREADY_DEFINED} ]]; then
+        if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
           echo "AAP instance already defined. Skipping step."
           # We still want to retrieve the admin password
           oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.admin-password.path)
