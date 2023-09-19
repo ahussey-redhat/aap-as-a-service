@@ -39,7 +39,7 @@ spec:
       type: string
     - default: "false"
       description: Is this AAP instance already defined?
-      name: instanceAlreadyDefined
+      name: isAlreadyDefined
       type: string
     - default: url
       description: OpenShift application URL
@@ -55,7 +55,7 @@ spec:
         #!/usr/bin/env bash
         set -euxo pipefail
 
-        export INSTANCE_ALREADY_DEFINED=$(params.instanceAlreadyDefined)
+        export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
 
         if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
           echo "AAP instance already defined. Skipping step."
@@ -133,7 +133,7 @@ spec:
         #!/usr/bin/env bash
         set -euxo pipefail
 
-        export INSTANCE_ALREADY_DEFINED=$(params.instanceAlreadyDefined)
+        export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
 
         if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
           echo "AAP instance already defined. Skipping step."
