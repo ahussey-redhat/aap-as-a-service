@@ -88,6 +88,13 @@ spec:
         #!/usr/bin/env bash
         set -euxo pipefail
 
+        export INSTANCE_ALREADY_DEFINED=$(params.instanceAlreadyDefined)
+
+        if [[ ${INSTANCE_ALREADY_DEFINED} ]]; then
+          echo "AAP instance already defined. Skipping step."
+          exit 0
+        fi
+
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
         export INSTANCE_ID=$(params.instanceID)
@@ -118,6 +125,13 @@ spec:
       script: |
         #!/usr/bin/env bash
         set -euxo pipefail
+
+        export INSTANCE_ALREADY_DEFINED=$(params.instanceAlreadyDefined)
+
+        if [[ ${INSTANCE_ALREADY_DEFINED} ]]; then
+          echo "AAP instance already defined. Skipping step."
+          exit 0
+        fi
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
@@ -174,6 +188,13 @@ spec:
       script: |
         #!/usr/bin/env bash
         set -euxo pipefail
+
+        export INSTANCE_ALREADY_DEFINED=$(params.instanceAlreadyDefined)
+
+        if [[ ${INSTANCE_ALREADY_DEFINED} ]]; then
+          echo "AAP instance already defined. Skipping step."
+          exit 0
+        fi
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
