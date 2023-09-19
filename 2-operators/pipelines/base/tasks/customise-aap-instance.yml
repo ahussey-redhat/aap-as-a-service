@@ -98,14 +98,14 @@ spec:
         yq -ei ".metadata.name |= envsubst" aap-instance/base/controller.yml
         yq -ei ".spec.route_host |= envsubst" aap-instance/base/controller.yml
         yq -ei ".metadata.name |= envsubst" aap-instance/base/controller_route.yml
-        yq -ei ".labels.app.kubernetes.io/part-of |= envsubst" aap-instance/base/controller_route.yml
+        yq -ei ".metadata.labels.\"app.kubernetes.io/part-of\" |= envsubst" aap-instance/base/controller_route.yml
         yq -ei ".spec.host |= envsubst" aap-instance/base/controller_route.yml
 
         # Configure PAH instance
         yq -ei ".metadata.name |= envsubst" aap-instance/base/hub.yml
         yq -ei ".spec.route_host |= envsubst" aap-instance/base/hub.yml
         yq -ei ".metadata.name |= envsubst" aap-instance/base/hub_route.yml
-        yq -ei ".labels.app.kubernetes.io/part-of |= envsubst" aap-instance/base/hub_route.yml
+        yq -ei ".metadata.labels.\"app.kubernetes.io/part-of\" |= envsubst" aap-instance/base/hub_route.yml
         yq -ei ".spec.host |= envsubst" aap-instance/base/hub_route.yml
 
         # Configure EDA instance
@@ -113,7 +113,7 @@ spec:
         yq -ei ".spec.route_host |= envsubst" aap-instance/base/eda.yml
         yq -ei ".spec.automation_server_url |= envsubst" aap-instance/base/eda.yml
         yq -ei ".metadata.name |= envsubst" aap-instance/base/eda_route.yml
-        yq -ei ".labels.app.kubernetes.io/part-of |= envsubst" aap-instance/base/eda_route.yml
+        yq -ei ".metadata.labels.\"app.kubernetes.io/part-of\" |= envsubst" aap-instance/base/eda_route.yml
         yq -ei ".spec.host |= envsubst" aap-instance/base/eda_route.yml
 
         exit 0
