@@ -91,13 +91,30 @@ spec:
         yq -ei ".metadata.namespace |= envsubst" aap-instance/base/operatorgroup.yml
         yq -ei ".spec.targetNamespaces.[0] |= envsubst" aap-instance/base/operatorgroup.yml
         yq -ei ".metadata.namespace |= envsubst" aap-instance/base/subscription.yml
-
-        # Configure AAP instance
-        yq -ei ".metadata.name |= envsubst" aap-instance/base/instance.yml
-        yq -ei ".spec.route_host |= envsubst" aap-instance/base/instance.yml
-        yq -ei ".metadata.namespace |= envsubst" aap-instance/base/rolebinding.yml
-        yq -ei ".spec.host |= envsubst" aap-instance/base/routes.yml
         yq -ei ".namespace |= envsubst" kustomization.yaml
+        yq -ei ".metadata.namespace |= envsubst" aap-instance/base/rolebinding.yml
+
+        # Configure Controller instance
+        yq -ei ".metadata.name |= envsubst" aap-instance/base/controller.yml
+        yq -ei ".spec.route_host |= envsubst" aap-instance/base/controller.yml
+        yq -ei ".metadata.name |= envsubst" aap-instance/base/controller_route.yml
+        yq -ei ".labels.app.kubernetes.io/part-of |= envsubst" aap-instance/base/controller_route.yml
+        yq -ei ".spec.host |= envsubst" aap-instance/base/controller_route.yml
+
+        # Configure PAH instance
+        yq -ei ".metadata.name |= envsubst" aap-instance/base/hub.yml
+        yq -ei ".spec.route_host |= envsubst" aap-instance/base/hub.yml
+        yq -ei ".metadata.name |= envsubst" aap-instance/base/hub_route.yml
+        yq -ei ".labels.app.kubernetes.io/part-of |= envsubst" aap-instance/base/hub_route.yml
+        yq -ei ".spec.host |= envsubst" aap-instance/base/hub_route.yml
+
+        # Configure EDA instance
+        yq -ei ".metadata.name |= envsubst" aap-instance/base/eda.yml
+        yq -ei ".spec.route_host |= envsubst" aap-instance/base/eda.yml
+        yq -ei ".spec.automation_server_url |= envsubst" aap-instance/base/eda.yml
+        yq -ei ".metadata.name |= envsubst" aap-instance/base/eda_route.yml
+        yq -ei ".labels.app.kubernetes.io/part-of |= envsubst" aap-instance/base/eda_route.yml
+        yq -ei ".spec.host |= envsubst" aap-instance/base/eda_route.yml
 
         exit 0
       securityContext:
