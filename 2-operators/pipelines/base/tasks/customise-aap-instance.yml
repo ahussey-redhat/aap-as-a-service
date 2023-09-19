@@ -118,6 +118,7 @@ spec:
         yq -ei ".metadata.labels.\"app.kubernetes.io/part-of\" |= envsubst" aap-instance/base/eda_route.yml
         yq -ei ".spec.host |= envsubst" aap-instance/base/eda_route.yml
         yq -ei ".spec.to.name |= envsubst" aap-instance/base/eda_route.yml
+        yq -ei ".metadata.labels.\"app.kubernetes.io/name\" |= envsubst" aap-instance/base/eda_route.yml
 
         exit 0
       securityContext:
