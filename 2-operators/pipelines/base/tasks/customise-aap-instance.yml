@@ -41,6 +41,10 @@ spec:
       description: Is this AAP instance already defined?
       name: instanceAlreadyDefined
       type: string
+    - default: url
+      description: OpenShift application URL
+      name: appUrl
+      type: string
   steps:
     # Perform operations that require YQ
     - name: edit-aap-instance-gitops-application
@@ -63,6 +67,7 @@ spec:
         export INSTANCE_ID=$(params.instanceID)
         export OWNER=$(params.owner)
         export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
+        export APP_URL=$(params.appUrl)
 
         cd $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
 
@@ -91,7 +96,7 @@ spec:
         yq -ei ".metadata.name |= envsubst" aap-instance/base/instance.yml
         yq -ei ".spec.route_host |= envsubst" aap-instance/base/instance.yml
         yq -ei ".metadata.namespace |= envsubst" aap-instance/base/rolebinding.yml
-
+        yq -ei ".spec.host |= envsubst" aap-instance/base/routes.yml
         yq -ei ".namespace |= envsubst" kustomization.yaml
 
         exit 0

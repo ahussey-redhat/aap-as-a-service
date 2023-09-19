@@ -141,6 +141,8 @@ spec:
           value: "$(params.instanceID)"
         - name: isAlreadyDefined
           value: "$(tasks.prepare-aap-instance.results.instance-already-defined)"
+        - name: appUrl
+          value: "$(tasks.prepare-aap-instance.results.app-url)"
       runAfter:
         - customise-aap-instance
       workspaces:
