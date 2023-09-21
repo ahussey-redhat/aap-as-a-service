@@ -218,7 +218,7 @@ spec:
         name: update-servicenow-ticket
       params:
         - name: status
-          value: initiating # ensure to add a comment saying it can take upto 10 minutes for the instance to be fully available
+          value: complete # ensure to add a comment saying it can take upto 10 minutes for the instance to be fully available
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
         - name: owner

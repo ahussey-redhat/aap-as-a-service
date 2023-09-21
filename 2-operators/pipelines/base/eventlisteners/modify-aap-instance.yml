@@ -1,0 +1,44 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: EventListener
+metadata:
+  name: modify-aap-instance
+spec:
+  triggers:
+    - name: servicenow-webhook
+      interceptors:
+        # - name: "secretRef"
+        #   value:
+        #     secretName: webhook-secret
+        #     secretKey: secretToken
+        - ref:
+            name: cel
+          params:
+            - name: "overlays"
+              value:
+                - key: owner
+                  expression: "body.author"
+                - key: serviceNowIncidentID
+                  expression: "body.serviceNowIncidentID"
+                - key: branchName
+                  expression: "body.branchName.lowerAscii()"
+                - key: teamName
+                  expression: "body.teamName.lowerAscii()"
+                - key: maxHosts
+                  expression: "body.maxHosts"
+                - key: instanceID
+                  expression: "body.instanceID"
+      bindings:
+        - name: owner
+          value: $(extensions.owner)
+        - name: serviceNowIncidentID
+          value: $(extensions.serviceNowIncidentID)
+        - name: branchName
+          value: $(extensions.branchName)
+        - name: teamName
+          value: $(extensions.teamName)
+        - name: maxHosts
+          value: $(extensions.maxHosts)
+        - name: instanceID
+          value: $(extensions.instanceID)
+      template:
+        ref: modify-aap-instance

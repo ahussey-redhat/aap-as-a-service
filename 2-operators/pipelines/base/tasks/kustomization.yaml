@@ -10,3 +10,4 @@ resources:
   - deploy-aap-instance.yml
   - conduct-day1-ops.yml
   - update-servicenow-ticket.yml
+  - modify-aap-instance.yml

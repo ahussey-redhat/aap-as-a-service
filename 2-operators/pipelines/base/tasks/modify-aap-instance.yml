@@ -1,0 +1,69 @@
+# WIP
+# This task should:
+# 1. create CRD instances to create an organization within the AAP instance
+# 2. configure SSO for external auth
+# 3. sync content for PAH
+# 4. configure logging and metrics
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  annotations:
+    tekton.dev/displayName: Update Max Hosts for Organization
+    tekton.dev/pipelines.minVersion: 0.17.0
+    tekton.dev/tags: aap
+  name: modify-aap-instance
+  labels:
+    app.kubernetes.io/version: '0.1'
+    operator.tekton.dev/operand-name: openshift-pipelines-addons
+    operator.tekton.dev/provider-type: ahussey
+spec:
+  description: >-
+    This task runs all the commands required to update an AAP instance.
+  params:
+    - description: The max number of managed nodes
+      name: maxHosts
+      type: string
+    - description: Branch name
+      name: branchName
+      type: string
+    - description: Team name
+      name: teamName
+      type: string
+    - description: AAP instance owner
+      name: owner
+      type: string
+    - description: ServiceNow incident ID
+      name: serviceNowIncidentID
+      type: string
+    - description: AAP instance number
+      name: instanceID
+      type: string
+  steps:
+    - name: update-default-organization-maxhosts
+      image: >-
+        registry.redhat.io/devspaces/udi-rhel8:latest
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+        set -euxo pipefail
+
+        export BRANCH_NAME=$(params.branchName)
+        export TEAM_NAME=$(params.teamName)
+        export INSTANCE_ID=$(params.instanceID)
+        export OWNER=$(params.owner)
+        export MAX_HOSTS=$(params.maxHosts)
+
+        ADMIN_PASSWORD=$(oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d)
+
+        echo "Updating maxHosts: ${MAX_HOSTS}"
+        # Update maxHosts for Default organization
+        curl -vk \
+        -u "admin:${ADMIN_PASSWORD}" \
+        -X PATCH \
+        -H 'Content-Type:application/json' \
+        -d "{
+          \"max_hosts\": ${MAX_HOSTS},
+        }" \
+        https://${TEAM_NAME}-controller-${INSTANCE_ID}.${APP_URL}/api/v2/organizations/1/
+
+        exit 0

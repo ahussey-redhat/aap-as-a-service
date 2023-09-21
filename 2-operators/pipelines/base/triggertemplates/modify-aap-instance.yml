@@ -1,0 +1,42 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: modify-aap-instance
+spec:
+  params:
+  - name: serviceNowIncidentID
+    description: The ServiceNow incident ID
+  - name: owner
+    description: The owner of this AAP instance
+  - name: branchName
+    description: The name of the user's Branch
+  - name: teamName
+    description: The name of the user's Team
+  - name: maxHosts
+    description: The maximum amount of hosts this AAP instance can manage
+    default: "20"
+  - name: instanceID
+    description: Iterative number associated with this AAP instance
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1
+    kind: PipelineRun
+    metadata:
+      generateName: modify-aap-instance-$(tt.params.branchName)-$(tt.params.teamName)-$(tt.params.instanceID)-
+    spec:
+      taskRunTemplate:
+        serviceAccountName: pipeline
+      pipelineRef:
+        name: modify-aap-instance
+      params:
+      - name: serviceNowIncidentID
+        value: $(tt.params.serviceNowIncidentID)
+      - name: owner
+        value: $(tt.params.owner)
+      - name: branchName
+        value: $(tt.params.branchName)
+      - name: teamName
+        value: $(tt.params.teamName)
+      - name: maxHosts
+        value: $(tt.params.maxHosts)
+      - name: instanceID
+        value: $(tt.params.instanceID)

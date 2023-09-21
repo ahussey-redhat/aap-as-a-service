@@ -1,0 +1,102 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: modify-aap-instance
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  params:
+    - name: serviceNowIncidentID
+      type: string
+      description: The ServiceNow ticket ID used for provisioning the AAP instance
+    - name: branchName
+      type: string
+      description: Name of user's Branch EG 'Enterprise IT'
+    - name: teamName
+      type: string
+      description: Name of user's Team EG 'Kubernetes'
+    - name: maxHosts
+      type: string
+      description: The maximum number of hosts this AAP instance can manage
+      default: "20"
+    - name: owner
+      type: string
+      description: Owner of the SericeNow request/AAP instance
+    - name: instanceID
+      type: string
+      description: Iterative number associated with this AAP instance
+  tasks:
+    - name: update-servicenow-ticket-updating
+      taskRef:
+        name: update-servicenow-ticket
+      params:
+        - name: status
+          value: updating
+        - name: serviceNowIncidentID
+          value: "$(params.serviceNowIncidentID)"
+        - name: owner
+          value: "$(params.owner)"
+        - name: branchName
+          value: "$(params.branchName)"
+        - name: teamName
+          value: "$(params.teamName)"
+        - name: instanceID
+          value: "$(params.instanceID)"
+    - name: modify-aap-instance
+      taskRef:
+        name: modify-aap-instance
+      params:
+        - name: maxHosts
+          value: "$(params.maxHosts)"
+        - name: serviceNowIncidentID
+          value: "$(params.serviceNowIncidentID)"
+        - name: owner
+          value: "$(params.owner)"
+        - name: branchName
+          value: "$(params.branchName)"
+        - name: teamName
+          value: "$(params.teamName)"
+        - name: instanceID
+          value: "$(params.instanceID)"
+      runAfter:
+        - update-servicenow-ticket-updating
+    - name: update-servicenow-ticket-complete
+      taskRef:
+        name: update-servicenow-ticket
+      params:
+        - name: status
+          value: complete # ensure to add a comment saying it can take upto 10 minutes for the instance to be fully available
+        - name: serviceNowIncidentID
+          value: "$(params.serviceNowIncidentID)"
+        - name: owner
+          value: "$(params.owner)"
+        - name: branchName
+          value: "$(params.branchName)"
+        - name: teamName
+          value: "$(params.teamName)"
+        - name: instanceID
+          value: "$(params.instanceID)"
+      runAfter:
+        - modify-aap-instance
+  finally:
+    - name: update-servicenow-ticket-failed
+      taskRef:
+        name: update-servicenow-ticket
+      params:
+        - name: status
+          value: initiating
+        - name: serviceNowIncidentID
+          value: "$(params.serviceNowIncidentID)"
+        - name: owner
+          value: "$(params.owner)"
+        - name: branchName
+          value: "$(params.branchName)"
+        - name: teamName
+          value: "$(params.teamName)"
+        - name: instanceID
+          value: "$(params.instanceID)"
+      when:
+        - input: $(tasks.status)
+          operator: in
+          values: ["Failed"]
