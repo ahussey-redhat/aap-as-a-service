@@ -1,0 +1,8 @@
+{
+    "author": "ahussey-redhat",
+    "serviceNowIncidentID": "test000001",
+    "branchName": "testBranch",
+    "teamName": "testTeam",
+    "maxHosts": "12",
+    "instanceID": "1"
+}

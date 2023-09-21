@@ -15,7 +15,7 @@ spec:
   host: modify-aap.apps.k8s.sandbox1760.opentlc.com
   to:
     kind: Service
-    name: el-aap-modify-instance
+    name: el-modify-aap-instance
   tls:
     termination: edge
     insecureEdgeTerminationPolicy: Allow
