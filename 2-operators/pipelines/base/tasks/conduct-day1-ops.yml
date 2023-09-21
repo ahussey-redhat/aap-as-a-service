@@ -62,10 +62,10 @@ spec:
 
         export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
 
-        if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
-          echo "AAP instance already defined. Skipping step."
-          exit 0
-        fi
+        # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
+        #   echo "AAP instance already defined. Skipping step."
+        #   exit 0
+        # fi
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
@@ -97,10 +97,10 @@ spec:
 
         export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
 
-        if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
-          echo "AAP instance already defined. Skipping step."
-          exit 0
-        fi
+        # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
+        #   echo "AAP instance already defined. Skipping step."
+        #   exit 0
+        # fi
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
@@ -135,10 +135,10 @@ spec:
 
         export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
 
-        if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
-          echo "AAP instance already defined. Skipping step."
-          exit 0
-        fi
+        # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
+        #   echo "AAP instance already defined. Skipping step."
+        #   exit 0
+        # fi
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
@@ -198,10 +198,10 @@ spec:
 
         export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
 
-        if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
-          echo "AAP instance already defined. Skipping step."
-          exit 0
-        fi
+        # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
+        #   echo "AAP instance already defined. Skipping step."
+        #   exit 0
+        # fi
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
