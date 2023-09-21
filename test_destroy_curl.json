@@ -1,0 +1,7 @@
+{
+    "author": "ahussey-redhat",
+    "serviceNowIncidentID": "test000001",
+    "branchName": "testBranch",
+    "teamName": "testTeam",
+    "instanceID": "1"
+}

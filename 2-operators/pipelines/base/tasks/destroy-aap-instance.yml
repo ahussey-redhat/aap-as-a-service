@@ -1,0 +1,124 @@
+# WIP
+# This should:
+# 1. Deploy an AAP instance, specific to the ServiceNow incident that was raised
+# 2. Be managed utilizing GitOps
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  annotations:
+    tekton.dev/displayName: Destroy the AAP instance
+    tekton.dev/pipelines.minVersion: 0.17.0
+    tekton.dev/tags: aap
+  name: destroy-aap-instance
+  labels:
+    app.kubernetes.io/version: '0.1'
+    operator.tekton.dev/operand-name: openshift-pipelines-addons
+    operator.tekton.dev/provider-type: ahussey
+spec:
+  description: >-
+    This task runs all the commands required to destory the AAP instance.
+  params:
+    - description: Branch name
+      name: branchName
+      type: string
+    - description: Team name
+      name: teamName
+      type: string
+    - description: AAP instance owner
+      name: owner
+      type: string
+    - description: ServiceNow incident ID
+      name: serviceNowIncidentID
+      type: string
+    - description: AAP instance number
+      name: instanceID
+      type: string
+  steps:
+    # Destroy AAP application in ArgoCD
+    - name: destory-aap-instance
+      env:
+        - name: HOME
+          value: /tekton/home
+      image: >-
+        image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+        set -euxo pipefail
+
+        export BRANCH_NAME=$(params.branchName)
+        export TEAM_NAME=$(params.teamName)
+        export INSTANCE_ID=$(params.instanceID)
+        export OWNER=$(params.owner)
+        export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
+
+        if [[ ! -d $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} ]]; then
+          echo "AAP instance not defined. Skipping step."
+          exit 0
+        fi
+
+        oc delete application ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} -n openshift-gitops
+
+        exit 0
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+
+    # Push changes to ArgoCD repo
+    - name: git-push
+      image: >-
+        registry.redhat.io/openshift-pipelines/pipelines-git-init-rhel8@sha256:1a50511583fc02a27012d17d942e247813404104ddd282d7e26f99765174392c
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+        set -euxo pipefail
+
+        export BRANCH_NAME=$(params.branchName)
+        export TEAM_NAME=$(params.teamName)
+        export INSTANCE_ID=$(params.instanceID)
+        export OWNER=$(params.owner)
+        export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
+
+        if [[ ! -d $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} ]]; then
+          echo "AAP instance not defined. Skipping step."
+          exit 0
+        fi
+
+        cd $(workspaces.output.path)
+
+        git config --global --add safe.directory $(workspaces.output.path)
+        git config --global user.name "${OWNER}"
+        git config --global user.email "${OWNER}@example.com"
+
+        # Configure SSH keys
+        git config core.sshCommand "ssh -v -i $(workspaces.ssh-directory.path)/id_rsa -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
+
+        rm -rf $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
+
+        git fetch --all
+        git checkout -b main
+        git branch --set-upstream-to=origin/main main
+        git add --all
+        git commit -m "Remove ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} environment"
+        git push -u origin main -f
+
+        exit 0
+
+  # Workspace definitions
+  workspaces:
+    - description: >-
+        The workspace which contains kubernetes manifests which we want to apply
+        on the cluster.
+      name: manifest-dir
+      optional: true
+    - description: >-
+        The workspace which contains the the kubeconfig file if in case we want
+        to run the oc command on another cluster.
+      name: kubeconfig-dir
+      optional: true
+    - description: >-
+        The workspace which contains the SSH configuration and certificates.
+      name: ssh-directory
+    - description: >-
+        The workspace which contains the ArgoCD cloned git repository
+      name: output

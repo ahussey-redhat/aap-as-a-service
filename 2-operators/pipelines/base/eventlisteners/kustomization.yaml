@@ -9,3 +9,5 @@ resources:
   - deploy-aap-instance-route.yml
   - modify-aap-instance.yml
   - modify-aap-instance-route.yml
+  - destroy-aap-instance.yml
+  - destroy-aap-instance-route.yml

@@ -7,3 +7,4 @@ namespace: aap-as-a-service
 resources:
   - deploy-aap-instance.yml
   - modify-aap-instance.yml
+  - destroy-aap-instance.yml

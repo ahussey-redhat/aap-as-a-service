@@ -1,0 +1,23 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: destroy-aap
+  namespace: aap-as-a-service
+  labels:
+    app.kubernetes.io/instance: pipeline-operator
+    app.kubernetes.io/managed-by: EventListener
+    app.kubernetes.io/part-of: Triggers
+    eventlistener: destroy-aap-instance
+  annotations:
+    cert-manager.io/issuer-name: letsencrypt-sandbox
+    cert-manager.io/issuer-kind: ClusterIssuer
+spec:
+  host: destroy-aap.apps.k8s.sandbox1760.opentlc.com
+  to:
+    kind: Service
+    name: el-destroy-aap-instance
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Allow
+  port:
+    targetPort: http-listener
