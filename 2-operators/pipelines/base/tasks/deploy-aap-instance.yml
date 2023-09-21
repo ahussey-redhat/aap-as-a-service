@@ -82,8 +82,8 @@ spec:
 
         oc apply -f $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}/application.yml
 
-        #echo "Waiting 120 seconds for initial admin password to be created"
-        #sleep 120
+        echo "Waiting 120 seconds for initial admin password to be created"
+        sleep 120
         oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.admin-password.path)
 
         exit 0
