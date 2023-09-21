@@ -110,6 +110,18 @@
             endpoint: "{{ sso_oidc_endpoint | b64encode }}"
             verify-ssl: "{{ sso_oidc_verify_ssl | b64encode }}"
 
+    # This namespace is later managed by GitOps, but is required for the initial bootstrapping to complete
+    - name: configure cert-manager project
+      kubernetes.core.k8s:
+        resource_definition:
+          kind: Project
+          apiVersion: project.openshift.io/v1
+          metadata:
+            name: cert-manager
+            labels:
+              kubernetes.io/metadata.name: cert-manager
+      failed_when: false
+
     - name: configure cert-manager route53 secret
       kubernetes.core.k8s:
         resource_definition:
