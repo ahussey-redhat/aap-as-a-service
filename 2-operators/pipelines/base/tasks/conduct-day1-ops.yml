@@ -160,15 +160,11 @@ spec:
         -d "{
         \"SOCIAL_AUTH_ORGANIZATION_MAP\": {
               \"Default\": {
-                  \"admins\": \"/.*(${TEAM_NAME}).*\$/\"
-              }
-          },
-          \"SOCIAL_AUTH_TEAM_MAP\": {
-            \"${TEAM_NAME}\": {
-                \"organization\": \"Default\",
+                \"admins\": \"/.*(${TEAM_NAME}).*\$/\",
+                \"remove_admins\": true,
                 \"users\": \"/.*(${TEAM_NAME}).*\$/\",
-                \"remove\": true
-            }
+                \"remove_users\": true
+              }
           },
           \"SOCIAL_AUTH_USER_FIELDS\": [
             \"username\"
