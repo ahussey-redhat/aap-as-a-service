@@ -62,6 +62,9 @@ spec:
 
         export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
 
+        # echo "Waiting for 120 seconds for AAP Controller to be up"
+        # sleep 120
+
         # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
         #   echo "AAP instance already defined. Skipping step."
         #   exit 0
@@ -160,7 +163,8 @@ spec:
                 \"organization\": \"Default\",
                 \"users\": \"/.*(${TEAM_NAME}).*\$/\",
                 \"remove\": true
-            }
+            },
+          \"SOCIAL_AUTH_USER_FIELDS\": \"/.*(${TEAM_NAME}).*\$/\"
           }
         }" \
         https://${TEAM_NAME}-controller-${INSTANCE_ID}.${APP_URL}/api/v2/settings/authentication/
