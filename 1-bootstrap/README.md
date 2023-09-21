@@ -8,5 +8,5 @@ NOTE: The bootstrap directory would traditionally be a seperate repo
 *Ensure you are logged into to an OpenShift Cluster*
 
 ```bash
-ansible-playbook playbook.yml -v
+ansible-playbook playbook.yml -v --vault-id @prompt
 ```
