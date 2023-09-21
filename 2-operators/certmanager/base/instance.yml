@@ -36,7 +36,7 @@ spec:
       dns01:
         route53:
           region: ap-southeast-2
-          hostedZoneID: ZFHW0MXZRANMO
+          hostedZoneID: Z2SYL2RA5IM05K
           accessKeyIDSecretRef:
             name: route53-credentials-secret
             key: access-key-id
