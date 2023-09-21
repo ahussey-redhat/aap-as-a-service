@@ -62,7 +62,7 @@ spec:
         -X PATCH \
         -H 'Content-Type:application/json' \
         -d "{
-          \"max_hosts\": ${MAX_HOSTS},
+          \"max_hosts\": ${MAX_HOSTS}
         }" \
         https://${TEAM_NAME}-controller-${INSTANCE_ID}.${APP_URL}/api/v2/organizations/1/
 
