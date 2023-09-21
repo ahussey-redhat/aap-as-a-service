@@ -163,12 +163,13 @@ spec:
                 \"organization\": \"Default\",
                 \"users\": \"/.*(${TEAM_NAME}).*\$/\",
                 \"remove\": true
-            },
+            }
+          },
           \"SOCIAL_AUTH_USER_FIELDS\": {
             \"organization\": \"Default\": [
               \"username\": \"/.*(${TEAM_NAME}).*\$/\"
               ]
-            }
+          }
         }" \
         https://${TEAM_NAME}-controller-${INSTANCE_ID}.${APP_URL}/api/v2/settings/authentication/
 
