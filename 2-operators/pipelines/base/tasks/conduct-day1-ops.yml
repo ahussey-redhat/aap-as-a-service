@@ -158,6 +158,11 @@ spec:
         -X PATCH \
         -H 'Content-Type:application/json' \
         -d "{
+        \"SOCIAL_AUTH_ORGANIZATION_MAP\": {
+              \"Default\": {
+                  \"admins\": \"/.*(${TEAM_NAME}).*\$/\"
+              }
+          },
           \"SOCIAL_AUTH_TEAM_MAP\": {
             \"${TEAM_NAME}\": {
                 \"organization\": \"Default\",
