@@ -24,7 +24,7 @@ spec:
       generateName: modify-aap-instance-$(tt.params.branchName)-$(tt.params.teamName)-$(tt.params.instanceID)-
     spec:
       taskRunTemplate:
-        serviceAccountName: deployer
+        serviceAccountName: pipeline
       pipelineRef:
         name: modify-aap-instance
       params:
