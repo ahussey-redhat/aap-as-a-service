@@ -11,6 +11,8 @@ metadata:
     tekton.dev/displayName: Conduct Day1 Operations
     tekton.dev/pipelines.minVersion: 0.17.0
     tekton.dev/tags: aap
+    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
   name: conduct-day1-ops
   labels:
     app.kubernetes.io/version: '0.1'

@@ -10,6 +10,8 @@ metadata:
     tekton.dev/tags:
       - app
       - servicenow
+    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
   name: update-servicenow-ticket
   labels:
     app.kubernetes.io/version: '0.1'
