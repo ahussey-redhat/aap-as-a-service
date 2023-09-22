@@ -42,8 +42,18 @@ spec:
       name: instanceAlreadyDefined
       type: string
   results:
-    - name: admin-password
-      description: The admin password for this AAP instance
+    - name: controller-admin-password
+      description: The admin password for this controller AAP instance
+    - name: hub-admin-password
+      description: The admin password for this private automation hub AAP instance
+    - name: eda-admin-password
+      description: The admin password for this event driven ansible AAP instance
+    - name: controller-url
+      description: The url for this controller AAP instance
+    - name: hub-url
+      description: The url for this private automation hub AAP instance
+    - name: eda-url
+      description: The url for this event driven ansible AAP instance
   steps:
     # Create AAP application in ArgoCD
     - name: deploy-aap-instance
@@ -69,7 +79,7 @@ spec:
         if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
           echo "AAP instance already defined. Skipping step."
           # We still want to retrieve the admin password
-          oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.admin-password.path)
+          oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.controller-admin-password.path)
           exit 0
         fi
 
@@ -84,8 +94,13 @@ spec:
 
         echo "Waiting 120 seconds for initial admin password to be created"
         sleep 120
-        oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.admin-password.path)
+        oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.controller-admin-password.path)
+        oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-hub-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.hub-admin-password.path)
+        oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-eda-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.eda-admin-password.path)
 
+        oc get route ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath='{.status.ingress[0].host}' | tee $(results.controller-url.path)
+        oc get route ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-hub -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath='{.status.ingress[0].host}' | tee $(results.hub-url.path)
+        oc get route ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-eda -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath='{.status.ingress[0].host}' | tee $(results.eda-url.path)
         exit 0
       securityContext:
         runAsNonRoot: true

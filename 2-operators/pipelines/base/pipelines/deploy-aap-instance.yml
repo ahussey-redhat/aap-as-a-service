@@ -185,7 +185,7 @@ spec:
         - name: isAlreadyDefined
           value: "$(tasks.prepare-aap-instance.results.instance-already-defined)"
         - name: adminPassword
-          value: "$(tasks.deploy-aap-instance.results.admin-password)"
+          value: "$(tasks.deploy-aap-instance.results.controller-admin-password)"
         - name: appUrl
           value: "$(tasks.prepare-aap-instance.results.app-url)"
       runAfter:
@@ -219,6 +219,18 @@ spec:
       params:
         - name: status
           value: complete # ensure to add a comment saying it can take upto 10 minutes for the instance to be fully available
+        - name: message
+          value: >-
+            AAP Controller
+              URL: https://$(tasks.deploy-aap-instance.results.controller-url)
+            AAP Private Automation Hub
+              URL: https://$(tasks.deploy-aap-instance.results.hub-url)
+              Username: admin
+              Password: $(tasks.deploy-aap-instance.results.hub-admin-password)
+            AAP Event Driven Ansible
+              URL: https://$(tasks.deploy-aap-instance.results.eda-url)
+              Username: admin
+              Password: $(tasks.deploy-aap-instance.results.eda-admin-password)
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
         - name: owner

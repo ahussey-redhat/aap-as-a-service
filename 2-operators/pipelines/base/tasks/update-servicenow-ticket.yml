@@ -35,6 +35,10 @@ spec:
   - name: status
     description: The status to update the incident with
     type: string
+  - name: message
+    description: The message to put in the ServiceNow Incident
+    type: string
+    default: ""
   steps:
     - name: update-incident
       resources: {}
@@ -43,6 +47,11 @@ spec:
       script: |
         #!/usr/bin/env bash
         set -euxo pipefail
-        echo "Updating ServiceNow ticket: $(params.serviceNowIncidentID) with status: $(params.status)"
-        echo "$(params.branchName)/$(params.teamName)/$(params.owner) requesting AAP instance: $(params.instanceID)"
-        echo "Currently this is a NOOP"
+        MESSAGE="$(params.message)"
+        if [[ ! ${MESSAGE} ]]; then
+          echo "Updating ServiceNow ticket: $(params.serviceNowIncidentID) with status: $(params.status)"
+          echo "$(params.branchName)/$(params.teamName)/$(params.owner) requesting AAP instance: $(params.instanceID)"
+          echo "Currently this is a NOOP"
+        else
+          echo "$(params.message)"
+        fi
