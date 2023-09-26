@@ -51,7 +51,7 @@ spec:
     # Perform operations that require YQ
     - name: edit-aap-instance-gitops-application
       image: >-
-        quay.io/ahussey/tekton-utils:latest
+        quay.io/ahussey/tekton-utils@sha256:07be338b30b20130621039fdaaab8d2909c0757959563a5bf1ffae506e1df5d3
       resources: {}
       script: |
         #!/usr/bin/env bash

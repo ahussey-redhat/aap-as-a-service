@@ -1,0 +1,15 @@
+schemaVersion: 2.1.0
+metadata:
+  name: aap-as-a-service
+attributes:
+  che-theia.eclipse.org/sidecar-policy: mergeImage
+  controller.devfile.io/devworkspace-config:
+    name: devworkspace-config
+    namespace: crw
+  controller.devfile.io/scc: container-build
+  controller.devfile.io/storage-type: common
+projects:
+  - git:
+      remotes:
+        origin: https://github.com/ahussey-redhat/aap-as-a-service.git
+    name: aap-as-a-service

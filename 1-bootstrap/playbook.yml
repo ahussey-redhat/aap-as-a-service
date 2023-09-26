@@ -134,3 +134,15 @@
             access-key-id: "{{ access_key_id | b64encode}}"
             secret-access-key: "{{ secret_access_key | b64encode }}"
           type: Opaque
+
+    - name: configure hub token secret
+      kubernetes.core.k8s:
+        resource_definition:
+          kind: Secret
+          apiVersion: v1
+          metadata:
+            name: hub-credentials
+            namespace: aap-as-a-service
+          data:
+            token: "{{ hub_token | b64encode}}"
+          type: Opaque

@@ -1,0 +1,143 @@
+# WIP
+# This task should:
+# 1. create CRD instances to create an organization within the AAP instance
+# 2. configure SSO for external auth
+# 3. sync content for PAH
+# 4. configure logging and metrics
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  annotations:
+    tekton.dev/displayName: Conduct Day2 Operations
+    tekton.dev/pipelines.minVersion: 0.17.0
+    tekton.dev/tags: aap
+    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+  name: conduct-day2-ops
+  labels:
+    app.kubernetes.io/version: '0.1'
+    operator.tekton.dev/operand-name: openshift-pipelines-addons
+    operator.tekton.dev/provider-type: ahussey
+spec:
+  description: >-
+    This task runs all the commands required to configure an AAP instance.
+  params:
+    - description: Branch name
+      name: branchName
+      type: string
+    - description: Team name
+      name: teamName
+      type: string
+    - description: AAP instance owner
+      name: owner
+      type: string
+    - description: ServiceNow incident ID
+      name: serviceNowIncidentID
+      type: string
+    - description: AAP instance number
+      name: instanceID
+      type: string
+    - default: "false"
+      description: Is this AAP instance already defined?
+      name: isAlreadyDefined
+      type: string
+    - default: password
+      description: Admin password for this AAP instance
+      name: hubAdminPassword
+      type: string
+    - default: url
+      description: OpenShift application URL
+      name: appUrl
+      type: string
+  steps:
+    - name: add-remote-token-for-certified-collections-hub
+      image: >-
+        registry.redhat.io/devspaces/udi-rhel8:latest
+      resources: {}
+      env:
+        - name: HUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: token
+              name: hub-credentials
+      script: |
+        #!/usr/bin/env bash
+        set -euxo pipefail
+
+        echo "Waiting for 120 seconds for AAP instance to be up"
+        sleep 120
+
+        # export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
+        # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
+        #   echo "AAP instance already defined. Skipping step."
+        #   exit 0
+        # fi
+
+        export BRANCH_NAME=$(params.branchName)
+        export TEAM_NAME=$(params.teamName)
+        export INSTANCE_ID=$(params.instanceID)
+        export APP_URL=$(params.appUrl)
+
+        CERTIFIED_COLLECTIONS_URL=$(curl -vk \
+        -u "admin:$(params.hubAdminPassword)" \
+        -X GET \
+        -H 'Content-Type:application/json' \
+        https://${TEAM_NAME}-hub-${INSTANCE_ID}.${APP_URL}/api/galaxy/pulp/api/v3/remotes/ansible/collection/ \
+        | jq -r '.results[0].pulp_href')
+
+        curl -vk \
+        -u "admin:$(params.hubAdminPassword)" \
+        -X PATCH \
+        -H 'Content-Type:application/json' \
+        -d "{
+          \"token\": \"${HUB_TOKEN}\"
+        }" \
+        https://${TEAM_NAME}-hub-${INSTANCE_ID}.${APP_URL}${CERTIFIED_COLLECTIONS_URL}
+
+        exit 0
+    - name: sync-certified-collections-hub
+      image: >-
+        registry.redhat.io/devspaces/udi-rhel8:latest
+      resources: {}
+      env:
+        - name: HUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: token
+              name: hub-credentials
+      script: |
+        #!/usr/bin/env bash
+        set -euxo pipefail
+
+        echo "Waiting for 120 seconds for AAP instance to be up"
+        sleep 120
+
+        # export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
+        # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
+        #   echo "AAP instance already defined. Skipping step."
+        #   exit 0
+        # fi
+
+        export BRANCH_NAME=$(params.branchName)
+        export TEAM_NAME=$(params.teamName)
+        export INSTANCE_ID=$(params.instanceID)
+        export APP_URL=$(params.appUrl)
+
+        CERTIFIED_COLLECTIONS_URL=$(curl -vk \
+        -u "admin:$(params.hubAdminPassword)" \
+        -X GET \
+        -H 'Content-Type:application/json' \
+        https://${TEAM_NAME}-hub-${INSTANCE_ID}.${APP_URL}/api/galaxy/pulp/api/v3/repositories/ansible/ansible/" \
+        |  jq -r '.results[] | select(.name == "rh-certified") | .pulp_href'
+
+        curl -vk \
+        -u "admin:$(params.hubAdminPassword)" \
+        -X PATCH \
+        -H 'Content-Type:application/json' \
+        -d "{
+          \"mirror\": true,
+          \"optimize\": true
+        }" \
+        https://${TEAM_NAME}-hub-${INSTANCE_ID}.${APP_URL}${CERTIFIED_COLLECTIONS_URL}/sync/
+
+        exit 0

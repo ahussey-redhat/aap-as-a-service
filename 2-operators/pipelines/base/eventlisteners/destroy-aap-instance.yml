@@ -16,15 +16,15 @@ spec:
             - name: "overlays"
               value:
                 - key: owner
-                  expression: "body.author"
+                  expression: body.author
                 - key: serviceNowIncidentID
-                  expression: "body.serviceNowIncidentID"
+                  expression: body.serviceNowIncidentID
                 - key: branchName
-                  expression: "body.branchName.lowerAscii()"
+                  expression: body.branchName.lowerAscii().replace(" ", "-")
                 - key: teamName
-                  expression: "body.teamName.lowerAscii()"
+                  expression: body.teamName.lowerAscii().replace(" ", "-")
                 - key: instanceID
-                  expression: "body.instanceID"
+                  expression: body.instanceID.lowerAscii().replace("AAP", "")
       bindings:
         - name: owner
           value: $(extensions.owner)

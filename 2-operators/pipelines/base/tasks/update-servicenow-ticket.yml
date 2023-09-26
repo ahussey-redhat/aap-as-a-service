@@ -7,9 +7,7 @@ metadata:
   annotations:
     tekton.dev/displayName: Update ServiceNow Incident
     tekton.dev/pipelines.minVersion: 0.17.0
-    tekton.dev/tags:
-      - app
-      - servicenow
+    tekton.dev/tags: aap, servicenow
     argocd.argoproj.io/sync-wave: "3"
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
   name: update-servicenow-ticket

@@ -1,3 +1,4 @@
 install-config.yaml
 clusterconfigs
 manifest*.zip
+venv/
