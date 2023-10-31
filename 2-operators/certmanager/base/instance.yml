@@ -32,7 +32,7 @@ spec:
     solvers:
     - selector:
         dnsZones:
-          - "k8s.sandbox1760.opentlc.com"
+          - "<change-me>"
       dns01:
         route53:
           region: ap-southeast-2

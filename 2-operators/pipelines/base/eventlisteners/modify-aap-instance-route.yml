@@ -12,7 +12,7 @@ metadata:
     cert-manager.io/issuer-name: letsencrypt-sandbox
     cert-manager.io/issuer-kind: ClusterIssuer
 spec:
-  host: modify-aap.apps.k8s.sandbox1760.opentlc.com
+  host: modify-aap.apps.<change-me>
   to:
     kind: Service
     name: el-modify-aap-instance
