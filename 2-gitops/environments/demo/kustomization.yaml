@@ -3,7 +3,7 @@ kind: Kustomization
 metadata:
   name: kustomization-file
 resources:
-  - applications/aap-operator.yml
+  # - applications/aap-operator.yml
   - applications/cert-manager-operator.yml
   # - applications/devspaces-operator.yml
   - applications/pipelines-operator.yml
