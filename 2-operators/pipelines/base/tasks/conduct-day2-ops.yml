@@ -62,8 +62,8 @@ spec:
         #!/usr/bin/env bash
         set -euxo pipefail
 
-        echo "Waiting for 120 seconds for AAP instance to be up"
-        sleep 120
+        echo "Waiting for 60 seconds for AAP instance to be up"
+        sleep 60
 
         # export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
         # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
