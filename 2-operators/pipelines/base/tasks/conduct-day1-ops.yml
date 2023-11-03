@@ -62,8 +62,8 @@ spec:
 
         export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
 
-        echo "Waiting for 60 seconds for AAP Controller to be up"
-        sleep 60
+        echo "Waiting for 30 seconds for AAP Controller to be up"
+        sleep 30
 
         # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
         #   echo "AAP instance already defined. Skipping step."

@@ -62,8 +62,8 @@ spec:
         #!/usr/bin/env bash
         set -euxo pipefail
 
-        echo "Waiting for 60 seconds for AAP instance to be up"
-        sleep 60
+        echo "Waiting for 30 seconds for AAP instance to be up"
+        sleep 30
 
         # export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
         # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
@@ -107,9 +107,6 @@ spec:
         #!/usr/bin/env bash
         set -euxo pipefail
 
-        echo "Waiting for 30 seconds for AAP instance to be up"
-        sleep 30
-
         # export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
         # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
         #   echo "AAP instance already defined. Skipping step."
@@ -125,8 +122,7 @@ spec:
         -u "admin:$(params.hubAdminPassword)" \
         -X GET \
         -H 'Content-Type:application/json' \
-        https://${TEAM_NAME}-hub-${INSTANCE_ID}.${APP_URL}/api/galaxy/pulp/api/v3/repositories/ansible/ansible/" \
-        |  jq -r '.results[] | select(.name == "rh-certified") | .pulp_href'
+        "https://${TEAM_NAME}-hub-${INSTANCE_ID}.${APP_URL}/api/galaxy/pulp/api/v3/repositories/ansible/ansible/" |  jq -r '.results[] | select(.name == "rh-certified") | .pulp_href')
 
         curl -vk \
         -u "admin:$(params.hubAdminPassword)" \
