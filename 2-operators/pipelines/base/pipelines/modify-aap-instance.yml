@@ -2,9 +2,6 @@ apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
   name: modify-aap-instance
-  annotations:
-    argocd.argoproj.io/sync-wave: "3"
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   params:
     - name: serviceNowIncidentID

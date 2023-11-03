@@ -9,8 +9,6 @@ metadata:
     tekton.dev/displayName: Destroy the AAP instance
     tekton.dev/pipelines.minVersion: 0.17.0
     tekton.dev/tags: aap
-    argocd.argoproj.io/sync-wave: "3"
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
   name: destroy-aap-instance
   labels:
     app.kubernetes.io/version: '0.1'

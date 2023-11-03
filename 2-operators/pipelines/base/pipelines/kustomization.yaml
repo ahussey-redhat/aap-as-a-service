@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: aap-as-a-service
 commonAnnotations:
     argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 resources:
   - deploy-aap-instance.yml
   - modify-aap-instance.yml
