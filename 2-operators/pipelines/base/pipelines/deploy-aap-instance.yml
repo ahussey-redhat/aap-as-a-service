@@ -280,6 +280,7 @@ spec:
           value: "$(params.instanceID)"
       runAfter:
         - update-servicenow-ticket-day1-complete
+        - update-servicenow-ticket-day2-complete
   finally:
     - name: update-servicenow-ticket-failed
       taskRef:
