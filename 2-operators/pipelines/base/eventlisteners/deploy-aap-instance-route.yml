@@ -12,7 +12,7 @@ metadata:
     cert-manager.io/issuer-name: letsencrypt-sandbox
     cert-manager.io/issuer-kind: ClusterIssuer
 spec:
-  host: deploy-aap.apps.cluster-8hfnw.8hfnw.sandbox2417.opentlc.com
+  host: deploy-aap.apps.cluster-ljlsm.ljlsm.sandbox1851.opentlc.com
   to:
     kind: Service
     name: el-aap-deploy-instance
