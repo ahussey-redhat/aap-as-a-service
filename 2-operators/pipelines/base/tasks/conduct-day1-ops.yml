@@ -272,7 +272,7 @@ spec:
           \"inventory\": \"1",
           \"project\": \"6",
           \"playbook\": \"hello_world.yml",
-          \"credentials\": \"1",
+          \"credentials\": \"1"
         }" \
         https://${TEAM_NAME}-controller-${INSTANCE_ID}.${APP_URL}/api/v2/job_templates/
 
