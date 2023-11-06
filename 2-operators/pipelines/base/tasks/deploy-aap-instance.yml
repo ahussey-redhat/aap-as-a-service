@@ -78,8 +78,14 @@ spec:
 
         if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
           echo "AAP instance already defined. Skipping step."
-          # We still want to retrieve the admin password
+          # We still want to retrieve passwords and routes
           oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.controller-admin-password.path)
+          oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-hub-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.hub-admin-password.path)
+          oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-eda-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.eda-admin-password.path)
+
+          oc get route ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath='{.status.ingress[0].host}' | tee $(results.controller-url.path)
+          oc get route ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-hub -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath='{.status.ingress[0].host}' | tee $(results.hub-url.path)
+          oc get route ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-eda -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath='{.status.ingress[0].host}' | tee $(results.eda-url.path)
           exit 0
         fi
 
