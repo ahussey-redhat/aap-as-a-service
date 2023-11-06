@@ -314,7 +314,7 @@ spec:
           \"scm_type\": \"git\",
           \"scm_url\": \"https://github.com/brianstinehart/product-demos/\"
         }" \
-        https://${TEAM_NAME}-controller-${INSTANCE_ID}.${APP_URL}/api/v2/job_templates/
+        https://${TEAM_NAME}-controller-${INSTANCE_ID}.${APP_URL}/api/v2/projects/
 
         exit 0
   # Workspace definitions
