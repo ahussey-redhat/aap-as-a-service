@@ -310,6 +310,7 @@ spec:
         -H 'Content-Type:application/json' \
         -d "{
           \"name\": \"Setup Project\",
+          \"organization\": \"1\",
           \"description\": \"Project to populate AAP with default objects\",
           \"scm_type\": \"git\",
           \"scm_url\": \"https://github.com/brianstinehart/product-demos/\"
@@ -351,6 +352,7 @@ spec:
         -d "{
           \"name\": \"AAP\",
           \"credential_type\": \"15\",
+          \"organization\": \"1\",
           \"inputs\": {
                 \"host\": \"${TEAM_NAME}-controller-${INSTANCE_ID}.${APP_URL}\",
                 \"password\": \"$(params.adminPassword)\",
