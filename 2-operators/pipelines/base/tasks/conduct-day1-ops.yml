@@ -234,6 +234,49 @@ spec:
         https://${TEAM_NAME}-controller-${INSTANCE_ID}.${APP_URL}/api/v2/settings/oidc/
 
         exit 0
+
+    - name: add-aap-servicenow-update-ticket-template 
+      image: >-
+        registry.redhat.io/devspaces/udi-rhel8:latest
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+        set -euxo pipefail
+
+        export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
+
+        # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
+        #   echo "AAP instance already defined. Skipping step."
+        #   exit 0
+        # fi
+
+        export BRANCH_NAME=$(params.branchName)
+        export TEAM_NAME=$(params.teamName)
+        export INSTANCE_ID=$(params.instanceID)
+        export OWNER=$(params.owner)
+        export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
+        export MAX_HOSTS=$(params.maxHosts)
+        export APP_URL=$(params.appUrl)
+
+        cd $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
+        echo "adding ServiceNow update ticket template"
+        # Add ServiceNow update ticket job template
+        curl -vk \
+        -u "admin:$(params.adminPassword)" \
+        -X POST \
+        -H 'Content-Type:application/json' \
+        -d "{
+          \"name\": \"ServiceNow Notification",
+          \"description\": \"${BRANCH_NAME}/${TEAM_NAME}/${INSTANCE_ID}/${SERVICE_NOW_INCIDENT_ID}\",
+          \"job_type\": \"run",
+          \"inventory\": \"1",
+          \"project\": \"6",
+          \"playbook\": \"hello_world.yml",
+          \"credentials\": \"1",
+        }" \
+        https://${TEAM_NAME}-controller-${INSTANCE_ID}.${APP_URL}/api/v2/job_templates/
+
+        exit 0
   # Workspace definitions
   workspaces:
     - description: >-
