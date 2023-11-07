@@ -1,3 +1,5 @@
 sso_oidc_key: servicenow-demo-rh
 sso_oidc_endpoint: https://sso.bastion.blueguardian.co/realms/aap-as-a-service
 sso_oidc_verify_ssl: "true"
+snow_user: admin
+snow_instance: https://demoallwf33029.service-now.com

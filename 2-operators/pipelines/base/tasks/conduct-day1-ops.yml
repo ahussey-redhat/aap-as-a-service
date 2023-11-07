@@ -51,6 +51,27 @@ spec:
       name: appUrl
       type: string
   steps:
+    # Wait if instance is not defined
+    - name: aap-build-wait
+      image: >-
+        registry.redhat.io/devspaces/udi-rhel8:latest
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+        set -euxo pipefail
+
+        export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
+
+        if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
+          echo "AAP instance already defined. Skipping step."
+          exit 0
+        fi
+
+        echo "Waiting for 60 seconds for AAP Controller to be up"
+        sleep 60
+
+        exit 0
+
     # Update appropriate variables for the AAP instance
     - name: upload-manifest-to-aap
       image: >-
@@ -61,9 +82,6 @@ spec:
         set -euxo pipefail
 
         export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
-
-        echo "Waiting for 30 seconds for AAP Controller to be up"
-        sleep 30
 
         # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
         #   echo "AAP instance already defined. Skipping step."
@@ -367,6 +385,22 @@ spec:
       image: >-
         registry.redhat.io/devspaces/udi-rhel8:latest
       resources: {}
+      env:
+        - name: SNOW_USER
+          valueFrom:
+            secretKeyRef:
+              name: servicenow
+              key: user
+        - name: SNOW_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: servicenow
+              key: secret
+        - name: SNOW_INSTANCE
+          valueFrom:
+            secretKeyRef:
+              name: servicenow
+              key: instance
       script: |
         #!/usr/bin/env bash
         set -euxo pipefail
@@ -404,7 +438,7 @@ spec:
           \"project\": \"16\",
           \"playbook\": \"setup_demo.yml\",
           \"credentials\": \"4\",
-          \"extra_vars\": \"ansible_python_interpreter: /usr/bin/python3\ndemo: brian_custom\nusername: admin\"
+          \"extra_vars\": \"ansible_python_interpreter: /usr/bin/python3\ndemo: brian_custom\nusername: ${SNOW_USER}\npassword: ${SNOW_PASSWORD}\ninstance: ${SNOW_INSTANCE}"
         }" \
         https://${TEAM_NAME}-controller-${INSTANCE_ID}.${APP_URL}/api/v2/job_templates/
 

@@ -116,6 +116,19 @@
             endpoint: "{{ sso_oidc_endpoint | b64encode }}"
             verify-ssl: "{{ sso_oidc_verify_ssl | b64encode }}"
 
+    - name: configure ServiceNow secret
+      kubernetes.core.k8s:
+        resource_definition:
+          kind: Secret
+          apiVersion: v1
+          metadata:
+            name: servicenow
+            namespace: aap-as-a-service
+          data:
+            user: "{{ snow_user | b64encode }}"
+            secret: "{{ snow_password | b64encode }}"
+            instance: "{{ snow_instance | b64encode }}"
+
     # This namespace is later managed by GitOps, but is required for the initial bootstrapping to complete
     - name: configure cert-manager project
       kubernetes.core.k8s:
