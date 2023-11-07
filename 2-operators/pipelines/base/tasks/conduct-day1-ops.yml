@@ -373,6 +373,9 @@ spec:
 
         export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
 
+        echo "Waiting for Setup Project to sync prior to Job Template creation"
+        sleep 30
+
         # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
         #   echo "AAP instance already defined. Skipping step."
         #   exit 0
@@ -398,7 +401,7 @@ spec:
           \"job_type\": \"run\",
           \"inventory\": \"1\",
           \"organization\": \"1\",
-          \"project\": \"15\",
+          \"project\": \"16\",
           \"playbook\": \"setup_demo.yml\",
           \"credentials\": \"4\",
           \"extra_vars\": \"ansible_python_interpreter: /usr/bin/python3\ndemo: brian_custom\nusername: admin\"
