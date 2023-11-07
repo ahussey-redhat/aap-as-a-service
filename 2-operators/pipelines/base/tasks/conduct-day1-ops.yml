@@ -403,7 +403,7 @@ spec:
           \"credentials\": \"4\",
           \"extra_vars\": \"ansible_python_interpreter: /usr/bin/python3\ndemo: brian_custom\nusername: admin\"
         }" \
-        https://${TEAM_NAME}-controller-${INSTANCE_ID}.${APP_URL}/api/v2/credentials/
+        https://${TEAM_NAME}-controller-${INSTANCE_ID}.${APP_URL}/api/v2/job_templates/
 
         exit 0
   # Workspace definitions
