@@ -475,7 +475,7 @@ spec:
         -X POST \
         -H 'Content-Type:application/json' \
         \
-        https://${TEAM_NAME}-controller-${INSTANCE_ID}.${APP_URL}api/v2/job_templates/19/launch/
+        https://${TEAM_NAME}-controller-${INSTANCE_ID}.${APP_URL}/api/v2/job_templates/19/launch/
 
         exit 0
   # Workspace definitions
