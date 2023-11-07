@@ -474,7 +474,6 @@ spec:
         -u "admin:$(params.adminPassword)" \
         -X POST \
         -H 'Content-Type:application/json' \
-        }" \
         https://${TEAM_NAME}-controller-${INSTANCE_ID}.${APP_URL}job_templates/19/launch/
 
         exit 0
