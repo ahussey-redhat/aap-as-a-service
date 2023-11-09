@@ -435,7 +435,7 @@ spec:
           \"job_type\": \"run\",
           \"inventory\": \"1\",
           \"organization\": \"1\",
-          \"project\": \"16\",
+          \"project\": \"Setup Project\",
           \"playbook\": \"setup_demo.yml\",
           \"credentials\": \"4\",
           \"extra_vars\": \"ansible_python_interpreter: /usr/bin/python3\ndemo: aap_setup\nusername: ${SNOW_USER}\npassword: ${SNOW_PASSWORD}\ninstance: ${SNOW_INSTANCE}\"
