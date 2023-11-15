@@ -5,7 +5,6 @@ metadata:
 spec:
   workspaces:
     - name: working-directory
-    - name: ssh-creds
     - name: aap-manifest-directory
   params:
     - name: argocd-git-url
@@ -58,8 +57,6 @@ spec:
       workspaces:
         - name: output
           workspace: working-directory
-        - name: ssh-directory
-          workspace: ssh-creds
       runAfter:
         - update-servicenow-ticket-init
     - name: update-servicenow-ticket-deploy
@@ -122,8 +119,6 @@ spec:
       workspaces:
         - name: output
           workspace: working-directory
-        - name: ssh-directory
-          workspace: ssh-creds
     - name: deploy-aap-instance
       taskRef:
         name: deploy-aap-instance

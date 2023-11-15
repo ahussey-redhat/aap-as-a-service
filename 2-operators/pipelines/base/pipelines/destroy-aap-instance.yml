@@ -5,7 +5,6 @@ metadata:
 spec:
   workspaces:
     - name: working-directory
-    - name: ssh-creds
   params:
     - name: argocd-git-url
       type: string
@@ -53,8 +52,6 @@ spec:
       workspaces:
         - name: output
           workspace: working-directory
-        - name: ssh-directory
-          workspace: ssh-creds
       runAfter:
         - update-servicenow-ticket-init
     - name: update-servicenow-ticket-destroy
@@ -94,8 +91,6 @@ spec:
       workspaces:
         - name: output
           workspace: working-directory
-        - name: ssh-directory
-          workspace: ssh-creds
     - name: update-servicenow-ticket-deployed
       taskRef:
         name: update-servicenow-ticket
