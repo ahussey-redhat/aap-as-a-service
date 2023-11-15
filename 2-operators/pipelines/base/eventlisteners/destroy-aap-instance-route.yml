@@ -12,7 +12,7 @@ metadata:
     cert-manager.io/issuer-name: letsencrypt-sandbox
     cert-manager.io/issuer-kind: ClusterIssuer
 spec:
-  host: destroy-aap.apps.cluster-ljlsm.ljlsm.sandbox1851.opentlc.com
+  host: destroy-aap.apps.cluster-f7pnm.f7pnm.sandbox1480.opentlc.com
   to:
     kind: Service
     name: el-destroy-aap-instance

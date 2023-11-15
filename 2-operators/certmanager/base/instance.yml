@@ -32,7 +32,7 @@ spec:
     solvers:
     - selector:
         dnsZones:
-          - "*.apps.cluster-ljlsm.ljlsm.sandbox1851.opentlc.com"
+          - "*.apps.cluster-f7pnm.f7pnm.sandbox1480.opentlc.com"
       dns01:
         route53:
           region: ap-southeast-2
