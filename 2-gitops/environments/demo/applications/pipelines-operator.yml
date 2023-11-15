@@ -15,7 +15,7 @@ spec:
     path: 2-operators/pipelines/overlays/latest
     repoURL: >-
       https://github.com/ahussey-redhat/aap-as-a-service.git
-    targetRevision: main
+    targetRevision: debug-eda-route
   syncPolicy:
     automated:
       prune: true
