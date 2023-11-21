@@ -1,0 +1,90 @@
+# WIP
+# This should:
+# 1. Update a ServiceNow incident with a specific status about the AAP instance being managed
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  annotations:
+    tekton.dev/displayName: Update ServiceNow Incident
+    tekton.dev/pipelines.minVersion: 0.17.0
+    tekton.dev/tags: aap, servicenow
+  name: update-servicenow-ticket
+  labels:
+    app.kubernetes.io/version: '0.1'
+    operator.tekton.dev/operand-name: openshift-pipelines-addons
+    operator.tekton.dev/provider-type: ahussey
+spec:
+  params:
+  - name: serviceNowIncidentID
+    description: The ServiceNow Incident ID number
+    type: string
+  - name: owner
+    description: The requester of the AAP instance
+    type: string
+  - name: branchName
+    description: The name of the Branch the requester belongs to
+    type: string
+  - name: teamName
+    description: The name of the Team the requester belongs to
+    type: string
+  - name: instanceID
+    description: The unique number associated with this instance
+    type: string
+  - name: status
+    description: The status to update the incident with
+    type: string
+  - name: message
+    description: The message to put in the ServiceNow Incident
+    type: string
+    default: ""
+  steps:
+    - name: update-servicenow-request 
+      image: >-
+        registry.redhat.io/devspaces/udi-rhel8:latest
+      resources: {}
+      env:
+        - name: SNOW_USER
+          valueFrom:
+            secretKeyRef:
+              name: servicenow
+              key: user
+        - name: SNOW_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: servicenow
+              key: secret
+        - name: SNOW_INSTANCE
+          valueFrom:
+            secretKeyRef:
+              name: servicenow
+              key: instance
+      script: |
+        #!/usr/bin/env bash
+        set -euxo pipefail
+
+        export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
+
+        # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
+        #   echo "AAP instance already defined. Skipping step."
+        #   exit 0
+        # fi
+
+        export BRANCH_NAME=$(params.branchName)
+        export TEAM_NAME=$(params.teamName)
+        export INSTANCE_ID=$(params.instanceID)
+        export OWNER=$(params.owner)
+        export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
+        export MAX_HOSTS=$(params.maxHosts)
+        export APP_URL=$(params.appUrl)
+
+        cd $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
+        echo "adding setup job template"
+        # Add setup job template
+        curl "https://dev97360.service-now.com/api/now/table/sc_request/f4c5b82c2f1231108779d6c6f699b62e" \
+        --request PUT \
+        --header "Accept:application/json" \
+        --header "Content-Type:application/json" \
+        --data "{\"work_notes\":\"AAP\"}" \
+        -u "${SNOW_USER}:${SNOW_PASSWORD}" \
+
+        exit 0
