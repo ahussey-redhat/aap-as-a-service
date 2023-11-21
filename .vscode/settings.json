@@ -1,9 +1,0 @@
-{
-    "ansible.python.interpreterPath": "/bin/python3.9",
-    "yaml.schemas": {
-        "https://json.schemastore.org/yamllint.json": [
-            "file:///home/local-admin/Documents/code/github/aap-as-a-service/2-operators/pipelines/base/tasks/deploy-aap-instance.yml",
-            "file:///home/local-admin/Documents/code/github/aap-as-a-service/2-operators/pipelines/base/tasks/update-servicenow-ticket.yml"
-        ]
-    }
-}
