@@ -30,9 +30,6 @@ spec:
   - name: instanceID
     description: The unique number associated with this instance
     type: string
-  - name: status
-    description: The status to update the incident with
-    type: string
   - name: message
     description: The message to put in the ServiceNow Incident
     type: string
@@ -40,16 +37,42 @@ spec:
   steps:
     - name: update-incident
       resources: {}
+      env:
+        - name: SNOW_USER
+          valueFrom:
+            secretKeyRef:
+              name: servicenow
+              key: user
+        - name: SNOW_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: servicenow
+              key: secret
+        - name: SNOW_INSTANCE
+          valueFrom:
+            secretKeyRef:
+              name: servicenow
+              key: instance
       image: >-
         registry.redhat.io/devspaces/udi-rhel8:latest
       script: |
         #!/usr/bin/env bash
         set -euxo pipefail
-        MESSAGE="$(params.message)"
+        export SERVICE_NOW_INCIDENT_ID="$(params.serviceNowIncidentID)"
+        export MESSAGE="$(params.message)"
         if [[ ! ${MESSAGE} ]]; then
-          echo "Updating ServiceNow ticket: $(params.serviceNowIncidentID) with status: $(params.status)"
-          echo "$(params.branchName)/$(params.teamName)/$(params.owner) requesting AAP instance: $(params.instanceID)"
-          echo "Currently this is a NOOP"
+          echo "Updating ServiceNow ticket: ${SERVICE_NOW_INCIDENT_ID}"
+          echo "$(params.branchName)/$(params.teamName)/$(params.owner) AAP instance: $(params.instanceID)"
         else
           echo "$(params.message)"
+            curl -u "${SNOW_USER}:${SNOW_PASSWORD}" \
+              --request PUT \
+              --header "Accept:application/json" \
+              --header "Content-Type:application/json" \
+              --data "{\"work_notes\":\"${MESSAGE}\"}" \
+              "${SNOW_INSTANCE}/api/now/table/sc_request/${SERVICE_NOW_INCIDENT_ID}"
+           if [[ $? != 0 ]]; then
+              echo "${MESSAGE}"
+              exit 0
+           fi
         fi

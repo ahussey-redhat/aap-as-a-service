@@ -36,7 +36,7 @@ spec:
       taskRef:
         name: update-servicenow-ticket
       params:
-        - name: status
+        - name: message
           value: initiating
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
@@ -66,8 +66,8 @@ spec:
       taskRef:
         name: update-servicenow-ticket
       params:
-        - name: status
-          value: initiating
+        - name: message
+          value: preparing
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
         - name: owner
@@ -149,8 +149,8 @@ spec:
       taskRef:
         name: update-servicenow-ticket
       params:
-        - name: status
-          value: initiating
+        - name: message
+          value: deployed
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
         - name: owner
@@ -196,7 +196,7 @@ spec:
       taskRef:
         name: update-servicenow-ticket
       params:
-        - name: status
+        - name: message
           value: day1
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
@@ -236,8 +236,8 @@ spec:
       taskRef:
         name: update-servicenow-ticket
       params:
-        - name: status
-          value: day1
+        - name: message
+          value: day2
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
         - name: owner
@@ -254,10 +254,8 @@ spec:
       taskRef:
         name: update-servicenow-ticket
       params:
-        - name: status
-          value: complete # ensure to add a comment saying it can take upto 10 minutes for the instance to be fully available
         - name: message
-          value: >-
+          value: |
             AAP Controller
               URL: https://$(tasks.deploy-aap-instance.results.controller-url)
             AAP Private Automation Hub
@@ -286,8 +284,8 @@ spec:
       taskRef:
         name: update-servicenow-ticket
       params:
-        - name: status
-          value: initiating
+        - name: message
+          value: failed
         - name: serviceNowIncidentID
           value: "$(params.serviceNowIncidentID)"
         - name: owner
