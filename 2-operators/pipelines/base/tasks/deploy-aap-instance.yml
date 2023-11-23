@@ -65,7 +65,7 @@ spec:
       resources: {}
       script: |
         #!/usr/bin/env bash
-        set -euxo pipefail
+        set -eux
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
@@ -98,18 +98,42 @@ spec:
 
         oc apply -f $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}/application.yml
 
-        AAP_SECRETS_AVAILABLE=false
-        while not ${AAP_SECRETS_AVAILABLE}; do
-          GET_SECRET_RESULT=$(oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.controller-admin-password.path))
-          if [[ $? == 0 ]]; then
-            AAP_SECRETS_AVAILABLE=true
+        AAP_CONTROLLER_SECRETS_AVAILABLE="false"
+        while [[ "${AAP_CONTROLLER_SECRETS_AVAILABLE}" == "false" ]]; do
+          GET_SECRET_RESULT=$(oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.controller-admin-password.path) || echo "resources not available")
+          if [[ "${GET_SECRET_RESULT}" != "" ]]; then
+            AAP_CONTROLLER_SECRETS_AVAILABLE=true
           fi
-          echo "Ansible Automation Platform resources not available yet"
+          if [[ "${GET_SECRET_RESULT}" == "" ]]; then
+            echo "Ansible Automation Platform resources not available yet"
+          fi
           sleep 10
         done
-        oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-hub-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.hub-admin-password.path)
-        oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-eda-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.eda-admin-password.path)
 
+        AAP_HUB_SECRETS_AVAILABLE="false"
+        while [[ "${AAP_HUB_SECRETS_AVAILABLE}" == "false" ]]; do
+          GET_SECRET_RESULT=$(oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-hub-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.hub-admin-password.path) || echo "resources not available")
+          if [[ "${GET_SECRET_RESULT}" != "" ]]; then
+            AAP_HUB_SECRETS_AVAILABLE=true
+          fi
+          if [[ "${GET_SECRET_RESULT}" == "" ]]; then
+            echo "Ansible Automation Platform resources not available yet"
+          fi
+          sleep 10
+        done
+      
+        AAP_EDA_SECRETS_AVAILABLE="false"
+        while [[ "${AAP_EDA_SECRETS_AVAILABLE}" == "false" ]]; do
+          GET_SECRET_RESULT=$(oc get secret ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-eda-admin-password -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath="{.data.password}" | base64 -d | tee $(results.eda-admin-password.path) || echo "resources not available")
+          if [[ "${GET_SECRET_RESULT}" != "" ]]; then
+            AAP_EDA_SECRETS_AVAILABLE=true
+          fi
+          if [[ "${GET_SECRET_RESULT}" == "" ]]; then
+            echo "Ansible Automation Platform resources not available yet"
+          fi
+          sleep 10
+        done
+        
         oc get route ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-controller -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath='{.status.ingress[0].host}' | tee $(results.controller-url.path)
         oc get route ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-hub -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath='{.status.ingress[0].host}' | tee $(results.hub-url.path)
         oc get route ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}-eda -n ${BRANCH_NAME}-${TEAM_NAME} -o jsonpath='{.status.ingress[0].host}' | tee $(results.eda-url.path)

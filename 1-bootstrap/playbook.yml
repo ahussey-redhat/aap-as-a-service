@@ -78,6 +78,17 @@
           secrets:
             - name: argocd-github-ssh
 
+    - name: link SSH secret to deployer service account
+      kubernetes.core.k8s:
+        resource_definition:
+          kind: ServiceAccount
+          apiVersion: v1
+          metadata:
+            name: deployer
+            namespace: aap-as-a-service
+          secrets:
+            - name: argocd-github-ssh
+
     - name: configure webhook secret
       kubernetes.core.k8s:
         resource_definition:

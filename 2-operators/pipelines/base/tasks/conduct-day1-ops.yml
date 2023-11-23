@@ -67,8 +67,8 @@ spec:
           exit 0
         fi
 
-        echo "Waiting for 60 seconds for AAP Controller to be up"
-        sleep 60
+        echo "Sleeping 120 seconds"
+        sleep 120
 
         exit 0
 
@@ -83,10 +83,10 @@ spec:
 
         export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
 
-        # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
-        #   echo "AAP instance already defined. Skipping step."
-        #   exit 0
-        # fi
+        if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
+          echo "AAP instance already defined. Skipping step."
+          exit 0
+        fi
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
@@ -94,6 +94,25 @@ spec:
         export OWNER=$(params.owner)
         export SERVICE_NOW_INCIDENT_ID=$(params.serviceNowIncidentID)
         export APP_URL=$(params.appUrl)
+
+        CONTROLLER_AVAILABLE="false"
+        while [[ "${CONTROLLER_AVAILABLE}" == "false" ]]; do
+
+        CONTROLLER_AVAILABLE_RESULT=$(curl -vk \
+          -X GET \
+          -H 'Accept: application/json' \
+          https://${TEAM_NAME}-hub-${INSTANCE_ID}.${APP_URL}/api/v2/ping/)
+  
+          if [[ "${CONTROLLER_AVAILABLE_RESULT}" != *"Application is not available"* ]] && [[ "${CONTROLLER_AVAILABLE_RESULT}" != *"Not Found"* ]]; then
+            CONTROLLER_AVAILABLE=true
+          fi
+  
+          if [[ "${CONTROLLER_AVAILABLE_RESULT}" == *"Application is not available"* ]] || [[ "${CONTROLLER_AVAILABLE_RESULT}" == *"Not Found"* ]]; then
+            echo "Ansible Automation Controller not available yet"
+          fi
+  
+          sleep 10
+        done
 
         cd $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
 
@@ -118,10 +137,10 @@ spec:
 
         export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
 
-        # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
-        #   echo "AAP instance already defined. Skipping step."
-        #   exit 0
-        # fi
+        if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
+          echo "AAP instance already defined. Skipping step."
+          exit 0
+        fi
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
@@ -156,10 +175,10 @@ spec:
 
         export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
 
-        # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
-        #   echo "AAP instance already defined. Skipping step."
-        #   exit 0
-        # fi
+        if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
+          echo "AAP instance already defined. Skipping step."
+          exit 0
+        fi
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
@@ -223,10 +242,10 @@ spec:
 
         export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
 
-        # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
-        #   echo "AAP instance already defined. Skipping step."
-        #   exit 0
-        # fi
+        if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
+          echo "AAP instance already defined. Skipping step."
+          exit 0
+        fi
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
@@ -263,10 +282,10 @@ spec:
 
         export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
 
-        # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
-        #   echo "AAP instance already defined. Skipping step."
-        #   exit 0
-        # fi
+        if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
+          echo "AAP instance already defined. Skipping step."
+          exit 0
+        fi
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
@@ -306,10 +325,10 @@ spec:
 
         export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
 
-        # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
-        #   echo "AAP instance already defined. Skipping step."
-        #   exit 0
-        # fi
+        if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
+          echo "AAP instance already defined. Skipping step."
+          exit 0
+        fi
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
@@ -347,10 +366,10 @@ spec:
 
         export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
 
-        # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
-        #   echo "AAP instance already defined. Skipping step."
-        #   exit 0
-        # fi
+        if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
+          echo "AAP instance already defined. Skipping step."
+          exit 0
+        fi
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
@@ -410,10 +429,10 @@ spec:
         echo "Waiting for Setup Project to sync prior to Job Template creation"
         sleep 30
 
-        # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
-        #   echo "AAP instance already defined. Skipping step."
-        #   exit 0
-        # fi
+        if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
+          echo "AAP instance already defined. Skipping step."
+          exit 0
+        fi
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
@@ -454,10 +473,10 @@ spec:
 
         export INSTANCE_ALREADY_DEFINED=$(params.isAlreadyDefined)
 
-        # if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
-        #   echo "AAP instance already defined. Skipping step."
-        #   exit 0
-        # fi
+        if [[ ${INSTANCE_ALREADY_DEFINED} == "true" ]]; then
+          echo "AAP instance already defined. Skipping step."
+          exit 0
+        fi
 
         export BRANCH_NAME=$(params.branchName)
         export TEAM_NAME=$(params.teamName)
