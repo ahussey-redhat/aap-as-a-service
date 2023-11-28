@@ -57,7 +57,10 @@ spec:
           exit 0
         fi
 
-        oc delete application ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} -n openshift-gitops
+        CSV_NAME=$(oc get csv -n ${BRANCH_NAME}-${TEAM_NAME} | grep "aap-operator" | tr -s ' ' ' ' | cut -d ' ' -f1)
+        oc delete -n ${BRANCH_NAME}-${TEAM_NAME} csv ${CSV_NAME} 
+
+        oc delete -n openshift-gitops application ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} || echo 'Application already deleted'
 
         exit 0
       securityContext:
@@ -91,13 +94,14 @@ spec:
         git config --global user.email "${OWNER}@example.com"
 
         # Configure SSH keys
-        git config core.sshCommand "ssh -v -i $(workspaces.ssh-directory.path)/id_rsa -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
-
-        rm -rf $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
+        git config core.sshCommand "ssh -v -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
 
         git fetch --all
         git checkout -b main
         git branch --set-upstream-to=origin/main main
+
+        rm -rf $(workspaces.output.path)/environments/${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID}
+
         git add --all
         git commit -m "Remove ${BRANCH_NAME}-${TEAM_NAME}-${INSTANCE_ID} environment"
         git push -u origin main -f
@@ -116,9 +120,6 @@ spec:
         to run the oc command on another cluster.
       name: kubeconfig-dir
       optional: true
-    - description: >-
-        The workspace which contains the SSH configuration and certificates.
-      name: ssh-directory
     - description: >-
         The workspace which contains the ArgoCD cloned git repository
       name: output

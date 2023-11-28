@@ -49,7 +49,7 @@ spec:
     # Perform operations that require YQ
     - name: edit-aap-instance-gitops-application
       image: >-
-        quay.io/ahussey/tekton-utils@sha256:07be338b30b20130621039fdaaab8d2909c0757959563a5bf1ffae506e1df5d3
+        quay.io/ahussey/tekton-utils:latest
       resources: {}
       script: |
         #!/usr/bin/env bash
@@ -154,7 +154,7 @@ spec:
         git config --global user.email "${OWNER}@example.com"
 
         # Configure SSH keys
-        git config core.sshCommand "ssh -v -i $(workspaces.ssh-directory.path)/id_rsa -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
+        git config core.sshCommand "ssh -v -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
 
         git fetch --all
         git checkout -b main
@@ -177,9 +177,6 @@ spec:
         to run the oc command on another cluster.
       name: kubeconfig-dir
       optional: true
-    - description: >-
-        The workspace which contains the SSH configuration and certificates.
-      name: ssh-directory
     - description: >-
         The workspace which contains the ArgoCD cloned git repository
       name: output

@@ -7,5 +7,7 @@
 			"path": "../aap-as-a-service-gitops"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"ansible.python.interpreterPath": "/bin/python"
+	}
 }

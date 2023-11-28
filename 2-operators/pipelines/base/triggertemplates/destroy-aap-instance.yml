@@ -39,9 +39,6 @@ spec:
       - name: instanceID
         value: $(tt.params.instanceID)
       workspaces:
-        - name: ssh-creds
-          secret:
-            secretName: argocd-github-ssh
         - name: aap-manifest-directory
           secret:
             secretName: manifest

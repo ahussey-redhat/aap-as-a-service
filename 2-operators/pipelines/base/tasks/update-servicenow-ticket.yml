@@ -65,14 +65,14 @@ spec:
           echo "$(params.branchName)/$(params.teamName)/$(params.owner) AAP instance: $(params.instanceID)"
         else
           echo "$(params.message)"
-            curl -u "${SNOW_USER}:${SNOW_PASSWORD}" \
+            CURL_RESULT=$(curl -u "${SNOW_USER}:${SNOW_PASSWORD}" \
               --request PUT \
               --header "Accept:application/json" \
               --header "Content-Type:application/json" \
               --data "{\"work_notes\":\"${MESSAGE}\"}" \
-              "${SNOW_INSTANCE}/api/now/table/sc_request/${SERVICE_NOW_INCIDENT_ID}"
-           if [[ $? != 0 ]]; then
-              echo "${MESSAGE}"
+              "${SNOW_INSTANCE}/api/now/table/sc_request/${SERVICE_NOW_INCIDENT_ID}")
+           if [[ "$(echo ${CURL_RESULT} | jq '.status')" == *"failure"* ]]; then
+              echo $(echo ${CURL_RESULT} | jq '.error.message')
               exit 0
            fi
         fi

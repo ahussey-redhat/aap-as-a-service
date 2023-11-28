@@ -63,9 +63,9 @@
             namespace: aap-as-a-service
             annotations:
               tekton.dev/git-0: github.com
-          type: Opaque
+          type: kubernetes.io/ssh-auth
           data:
-            id_rsa: "{{ ssh_private_key | b64encode}}"
+            ssh-privatekey: "{{ ssh_private_key | b64encode}}"
 
     - name: link SSH secret to pipelines service account
       kubernetes.core.k8s:
@@ -74,6 +74,17 @@
           apiVersion: v1
           metadata:
             name: pipeline
+            namespace: aap-as-a-service
+          secrets:
+            - name: argocd-github-ssh
+
+    - name: link SSH secret to deployer service account
+      kubernetes.core.k8s:
+        resource_definition:
+          kind: ServiceAccount
+          apiVersion: v1
+          metadata:
+            name: deployer
             namespace: aap-as-a-service
           secrets:
             - name: argocd-github-ssh
