@@ -15,19 +15,15 @@
       kubernetes.core.k8s:
         src: "argocd/operatorgroup.yml"
 
+    - name: configure argocd subscription
+      kubernetes.core.k8s:
+        src: "argocd/subscription.yml"
+
     - name: wait for ArgoCD to start deploying
       ansible.builtin.pause:
         echo: no
         prompt: "Waiting for ArgoCD to start deploying"
-        seconds: 20
-
-    - name: configure argocd subscription
-      kubernetes.core.k8s:
-        src: "argocd/subscription.yml"
-      register: deploy_argocd
-      until: "deploy_argocd.result.status.state == 'AtLatestKnown'"
-      retries: 10
-      delay: 10
+        seconds: 60
 
     - name: configure argocd cluster role binding
       kubernetes.core.k8s:
