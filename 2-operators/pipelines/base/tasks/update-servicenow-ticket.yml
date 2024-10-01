@@ -37,22 +37,22 @@ spec:
   steps:
     - name: update-incident
       resources: {}
-      env:
-        - name: SNOW_USER
-          valueFrom:
-            secretKeyRef:
-              name: servicenow
-              key: user
-        - name: SNOW_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: servicenow
-              key: secret
-        - name: SNOW_INSTANCE
-          valueFrom:
-            secretKeyRef:
-              name: servicenow
-              key: instance
+#      env:
+#        - name: SNOW_USER
+#          valueFrom:
+#            secretKeyRef:
+#              name: servicenow
+#              key: user
+#        - name: SNOW_PASSWORD
+#          valueFrom:
+#            secretKeyRef:
+#              name: servicenow
+#              key: secret
+#        - name: SNOW_INSTANCE
+#          valueFrom:
+#            secretKeyRef:
+#              name: servicenow
+#              key: instance
       image: >-
         registry.redhat.io/devspaces/udi-rhel8:latest
       script: |
@@ -65,12 +65,12 @@ spec:
           echo "$(params.branchName)/$(params.teamName)/$(params.owner) AAP instance: $(params.instanceID)"
         else
           echo "$(params.message)"
-            CURL_RESULT=$(curl -u "${SNOW_USER}:${SNOW_PASSWORD}" \
-              --request PUT \
-              --header "Accept:application/json" \
-              --header "Content-Type:application/json" \
-              --data "{\"work_notes\":\"${MESSAGE}\"}" \
-              "${SNOW_INSTANCE}/api/now/table/sc_request/${SERVICE_NOW_INCIDENT_ID}")
+            #CURL_RESULT=$(curl -u "${SNOW_USER}:${SNOW_PASSWORD}" \
+            #  --request PUT \
+            #  --header "Accept:application/json" \
+            #  --header "Content-Type:application/json" \
+            #  --data "{\"work_notes\":\"${MESSAGE}\"}" \
+            #  "${SNOW_INSTANCE}/api/now/table/sc_request/${SERVICE_NOW_INCIDENT_ID}")
            if [[ "$(echo ${CURL_RESULT} | jq '.status')" == *"failure"* ]]; then
               echo $(echo ${CURL_RESULT} | jq '.error.message')
               exit 0
